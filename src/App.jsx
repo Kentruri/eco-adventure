@@ -1,10 +1,13 @@
-import './App.css'
-
+import '@/App.css'
+import store from '@/redux/store'
+import { Provider } from 'react-redux'
 function App() {
   return (
-    <>
-    Here we're gonna start :D
-    </>
+    <div className="App">
+      <Provider store={store}>
+        Web super 3D
+      </Provider>
+    </div>
   )
 }
 
