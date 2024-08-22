@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { doSignOut, doCreateUserWithEmailAndPassword, doSignInWithGoogle } from "@/firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const initialState = {
   currentUser: null,
@@ -35,7 +36,16 @@ export const createUserWithEmailAndPassword = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const result = await doCreateUserWithEmailAndPassword(email, password);
+
+      const userRef = doc(db, "users", result.user.uid);
+      await setDoc(userRef, {
+        email: result.user.email,
+        createdAt: new Date(),
+        uid: result.user.uid,    
+      });
+
       return result.user;
+
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -47,7 +57,16 @@ export const signInWithGoogle = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const result = await doSignInWithGoogle();
-      return result.user;  
+
+      const userRef = doc(db, "users", result.user.uid);
+      await setDoc(userRef, {
+        email: result.user.email,
+        createdAt: new Date(),
+        uid: result.user.uid,
+      }, { merge: true });  
+
+      return result.user;
+
     } catch (error) {
       return rejectWithValue(error.message);
     }
