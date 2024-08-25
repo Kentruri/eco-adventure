@@ -4,4 +4,4 @@
 
 ![EcoAdventure Logo](public/logo/gitRD.png)
 
-### URL : [Eco Adventure](https://eco-adventure-dapou3h77-kentruris-projects.vercel.app/)
+### URL : [Eco Adventure](https://eco-adventure.vercel.app/)
