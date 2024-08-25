@@ -46,7 +46,7 @@ function App() {
           element={
             <div style={{ display: "flex", justifyContent: "center", background: "white", width:"100vw",height:"100vh"}}>
             
-              <img src="public/logo/mainLogoBg.png"></img>
+              <img src="/logo/mainLogoBg.png"></img>
             </div>
           }
         />
