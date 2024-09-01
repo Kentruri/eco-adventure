@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { doSignOut, doCreateUserWithEmailAndPassword, doSignInWithGoogle } from "@/firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -13,15 +13,19 @@ const initialState = {
 
 export const initializeAuth = createAsyncThunk(
   "auth/initializeAuth",
-  async (_, { rejectWithValue }) => {
+  (_, { rejectWithValue }) => {
     return new Promise((resolve, reject) => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          resolve({ user, loggedIn: true });
-        } else {
-          resolve({ user: null, loggedIn: false });
-        }
-      }, (error) => rejectWithValue(error.message));
+      onAuthStateChanged(
+        auth,
+        (user) => {
+          if (user) {
+            resolve({ user, loggedIn: true });
+          } else {
+            resolve({ user: null, loggedIn: false });
+          }
+        },
+        (error) => reject(rejectWithValue(error.message))
+      );
     });
   }
 );
@@ -55,20 +59,13 @@ export const createUserWithEmailAndPassword = createAsyncThunk(
 export const signInWithGoogle = createAsyncThunk(
   'auth/signInWithGoogle',
   async (_, { rejectWithValue }) => {
+    const provider = new GoogleAuthProvider();
     try {
-      const result = await doSignInWithGoogle();
-
-      const userRef = doc(db, "users", result.user.uid);
-      await setDoc(userRef, {
-        email: result.user.email,
-        createdAt: new Date(),
-        uid: result.user.uid,
-      }, { merge: true });  
-
-      return result.user;
-
+      const result = await signInWithPopup(auth, provider);
+      return result.user; 
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("Error during Google sign-in:", error);
+      return rejectWithValue(error.message); 
     }
   }
 );
