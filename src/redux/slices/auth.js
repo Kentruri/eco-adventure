@@ -3,6 +3,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebas
 import { auth } from "@/firebase/firebase";
 import { doSignOut, doCreateUserWithEmailAndPassword, doSignInWithGoogle } from "@/firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
 const initialState = {
   currentUser: null,
@@ -45,7 +46,7 @@ export const createUserWithEmailAndPassword = createAsyncThunk(
       await setDoc(userRef, {
         email: result.user.email,
         createdAt: new Date(),
-        uid: result.user.uid,    
+        uid: result.user.uid,
       });
 
       return result.user;
@@ -62,10 +63,16 @@ export const signInWithGoogle = createAsyncThunk(
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      return result.user; 
+      const userRef = doc(db, "users", result.user.uid);
+      await setDoc(userRef, {
+        email: result.user.email,
+        createdAt: new Date(),
+        uid: result.user.uid,
+      }, { merge: true });
+      return result.user;
     } catch (error) {
       console.error("Error during Google sign-in:", error);
-      return rejectWithValue(error.message); 
+      return rejectWithValue(error.message);
     }
   }
 );
