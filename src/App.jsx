@@ -5,6 +5,7 @@ import store from '@/redux/store';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import { initializeAuth } from '@/redux/slices/auth';
+import Login from "@/components/Login.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function App() {
           path="/login"
           element={
             <AuthRoute>
-              {/* <LoginPage /> */}
+                <Login />
             </AuthRoute>
           }
         />
