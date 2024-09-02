@@ -137,4 +137,6 @@ export const authSlice = createSlice({
   reducers: {},
 });
 
+export const selectAuth = (state) => state.auth
+
 export default authSlice.reducer;

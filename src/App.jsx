@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '@/redux/store';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
-import { initializeAuth } from '@/redux/slices/auth';
+import { initializeAuth, selectAuth } from '@/redux/slices/auth';
 import Login from "@/components/Login.jsx";
 
 function App() {
   const dispatch = useDispatch();
+  const { userLoggedIn } = useSelector(selectAuth);
 
   useEffect(() => {
     dispatch(initializeAuth());
@@ -20,9 +21,11 @@ function App() {
         <Route
           path="/login"
           element={
-            <AuthRoute>
+            userLoggedIn ? <Navigate to="/dashboard" /> : (
+              <AuthRoute>
                 <Login />
-            </AuthRoute>
+              </AuthRoute>
+            )
           }
         />
         <Route
@@ -37,18 +40,17 @@ function App() {
           path="/dashboard"
           element={
             <PrivateRoute>
+              <h1>
+                dashboard
+              </h1>
               {/* <Dashboard /> */}
             </PrivateRoute>
           }
         />
-
         <Route
           path="/"
           element={
-            <div style={{ display: "flex", justifyContent: "center", background: "white", width:"100vw",height:"100vh"}}>
-            
-              <img src="/logo/mainLogoBg.png"></img>
-            </div>
+            userLoggedIn ? <Navigate to="/dashboard" /> : <div><h1>hi there</h1></div>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
