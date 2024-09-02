@@ -2,23 +2,22 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '@/redux/store';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from '@/components/PrivateRoute';
 import AuthRoute from '@/components/AuthRoute';
 import { initializeAuth, selectAuth } from '@/redux/slices/auth';
 import Login from "@/components/Login.jsx";
 import Dashboard from '@/components/Dashboard';
+import LadingPage from '@/components/LandingPage';
 
 function App() {
   const dispatch = useDispatch();
-  const { userLoggedIn, loading } = useSelector(selectAuth);
+  const { userLoggedIn } = useSelector(selectAuth);
 
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>; 
-  }
+  if (userLoggedIn === null) return <></>
 
   return (
     <Router>
@@ -54,7 +53,7 @@ function App() {
           path="/"
           element={
             <AuthRoute>
-              <div><h1>hi there</h1></div>
+              <LadingPage/>
             </AuthRoute>
           }
         />

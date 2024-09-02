@@ -7,7 +7,7 @@ import { db } from "../../firebase/firebase";
 
 const initialState = {
   currentUser: null,
-  userLoggedIn: false,
+  userLoggedIn: null,
   loading: false,
   loadingGoogle: false,
   error: null,
