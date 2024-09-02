@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '@/redux/store';
-import PrivateRoute from './components/PrivateRoute';
-import AuthRoute from './components/AuthRoute';
-import { initializeAuth } from '@/redux/slices/auth';
+import PrivateRoute from '@/components/PrivateRoute';
+import AuthRoute from '@/components/AuthRoute';
+import { initializeAuth, selectAuth } from '@/redux/slices/auth';
+import Login from "@/components/Login.jsx";
+import Dashboard from '@/components/Dashboard';
+import LadingPage from '@/components/LandingPage';
 
 function App() {
   const dispatch = useDispatch();
+  const { userLoggedIn } = useSelector(selectAuth);
 
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);
+
+  if (userLoggedIn === null) return <></>
 
   return (
     <Router>
@@ -19,9 +25,11 @@ function App() {
         <Route
           path="/login"
           element={
-            <AuthRoute>
-              {/* <LoginPage /> */}
-            </AuthRoute>
+            userLoggedIn ? <Navigate to="/dashboard" /> : (
+              <AuthRoute>
+                <Login />
+              </AuthRoute>
+            )
           }
         />
         <Route
@@ -36,18 +44,17 @@ function App() {
           path="/dashboard"
           element={
             <PrivateRoute>
-              {/* <Dashboard /> */}
+
+              <Dashboard />
             </PrivateRoute>
           }
         />
-
         <Route
           path="/"
           element={
-            <div style={{ display: "flex", justifyContent: "center", background: "white", width:"100vw",height:"100vh"}}>
-            
-              <img src="/logo/mainLogoBg.png"></img>
-            </div>
+            <AuthRoute>
+              <LadingPage/>
+            </AuthRoute>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />

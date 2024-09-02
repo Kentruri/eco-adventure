@@ -7,8 +7,9 @@ import { db } from "../../firebase/firebase";
 
 const initialState = {
   currentUser: null,
-  userLoggedIn: false,
-  loading: true,
+  userLoggedIn: null,
+  loading: false,
+  loadingGoogle: false,
   error: null,
 };
 
@@ -20,7 +21,12 @@ export const initializeAuth = createAsyncThunk(
         auth,
         (user) => {
           if (user) {
-            resolve({ user, loggedIn: true });
+            const serializedUser = {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            };
+            resolve({ user: serializedUser, loggedIn: true });
           } else {
             resolve({ user: null, loggedIn: false });
           }
@@ -49,7 +55,13 @@ export const createUserWithEmailAndPassword = createAsyncThunk(
         uid: result.user.uid,
       });
 
-      return result.user;
+      const serializedUser = {
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+      };
+
+      return serializedUser;
 
     } catch (error) {
       return rejectWithValue(error.message);
@@ -69,7 +81,14 @@ export const signInWithGoogle = createAsyncThunk(
         createdAt: new Date(),
         uid: result.user.uid,
       }, { merge: true });
-      return result.user;
+
+      const serializedUser = {
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+      };
+
+      return serializedUser;
     } catch (error) {
       console.error("Error during Google sign-in:", error);
       return rejectWithValue(error.message);
@@ -104,15 +123,15 @@ export const sharedExtraReducers = (builder) => {
       state.userLoggedIn = false;
     })
   builder.addCase(signInWithGoogle.pending, (state) => {
-    state.loading = true;
+    state.loadingGoogle = true;
   })
     .addCase(signInWithGoogle.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingGoogle = false;
       state.currentUser = action.payload;
       state.userLoggedIn = true;
     })
     .addCase(signInWithGoogle.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingGoogle = false;
       state.error = action.payload;
     })
   builder
@@ -136,5 +155,7 @@ export const authSlice = createSlice({
   extraReducers: sharedExtraReducers,
   reducers: {},
 });
+
+export const selectAuth = (state) => state.auth
 
 export default authSlice.reducer;
