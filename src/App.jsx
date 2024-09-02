@@ -3,17 +3,22 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '@/redux/store';
 import PrivateRoute from './components/PrivateRoute';
-import AuthRoute from './components/AuthRoute';
+import AuthRoute from '@/components/AuthRoute';
 import { initializeAuth, selectAuth } from '@/redux/slices/auth';
 import Login from "@/components/Login.jsx";
+import Dashboard from '@/components/Dashboard';
 
 function App() {
   const dispatch = useDispatch();
-  const { userLoggedIn } = useSelector(selectAuth);
+  const { userLoggedIn, loading } = useSelector(selectAuth);
 
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
 
   return (
     <Router>
@@ -40,17 +45,17 @@ function App() {
           path="/dashboard"
           element={
             <PrivateRoute>
-              <h1>
-                dashboard
-              </h1>
-              {/* <Dashboard /> */}
+
+              <Dashboard />
             </PrivateRoute>
           }
         />
         <Route
           path="/"
           element={
-            userLoggedIn ? <Navigate to="/dashboard" /> : <div><h1>hi there</h1></div>
+            <AuthRoute>
+              <div><h1>hi there</h1></div>
+            </AuthRoute>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
