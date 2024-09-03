@@ -36,10 +36,19 @@ const Dashboard = () => {
     }
   }, [flyControlsRef]);
 
+  const getDisplayName = (email) => {
+    if (email) {
+      const name = email.split('.')[0]; 
+      return name;
+    }
+    return '';
+  };
+
+
   return (
     <div className="h-screen w-screen mt-32">
       <p className="text-lg font-bold">
-        Hi, {currentUser.displayName} !
+        Hi, {currentUser.displayName || getDisplayName(currentUser.email)} !
       </p>
       <Canvas className="h-[90%] w-[90vw]">
         <PerspectiveCamera makeDefault position={[0, 0, 5]} />
