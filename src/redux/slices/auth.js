@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup,signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
-import { doSignOut, doCreateUserWithEmailAndPassword, doSignInWithGoogle } from "@/firebase/auth";
+import { doSignOut, doCreateUserWithEmailAndPassword } from "@/firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
@@ -69,6 +69,24 @@ export const createUserWithEmailAndPassword = createAsyncThunk(
   }
 );
 
+export const doSignInWithEmailAndPassword = createAsyncThunk(
+  'auth/doSignInWithEmailAndPassword',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+      const serializedUser = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+      };
+      return serializedUser;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const signInWithGoogle = createAsyncThunk(
   'auth/signInWithGoogle',
   async (_, { rejectWithValue }) => {
@@ -97,6 +115,20 @@ export const signInWithGoogle = createAsyncThunk(
 );
 
 export const sharedExtraReducers = (builder) => {
+  builder
+    .addCase(doSignInWithEmailAndPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(doSignInWithEmailAndPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentUser = action.payload;
+      state.userLoggedIn = true;
+    })
+    .addCase(doSignInWithEmailAndPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
   builder
     .addCase(initializeAuth.pending, (state) => {
       state.loading = true;
