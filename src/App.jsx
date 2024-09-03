@@ -8,6 +8,8 @@ import { initializeAuth, selectAuth } from '@/redux/slices/auth';
 import Login from "@/components/Login.jsx";
 import Dashboard from '@/components/Dashboard';
 import LadingPage from '@/components/LandingPage';
+import Navbar from '@/components/Navbar';
+import SignUp from '@/components/SignUp';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ function App() {
 
   return (
     <Router>
+      <Navbar/>
       <Routes>
         <Route
           path="/login"
@@ -36,7 +39,7 @@ function App() {
           path="/signup"
           element={
             <AuthRoute>
-              {/* <SignUpPage /> */}
+              <SignUp/>
             </AuthRoute>
           }
         />
