@@ -1,57 +1,55 @@
-import React, { useRef, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Box } from '@react-three/drei';
-import * as THREE from 'three';
-import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
 
-// Component to animate the box using a cosine wave
-const AnimatedBox = () => {
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/redux/slices/auth";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { PerspectiveCamera, FlyControls } from "@react-three/drei";
+import { useRef, useEffect } from "react";
+
+const RotatingBox = () => {
   const meshRef = useRef(null);
 
-  // Animate the box using cosine wave
   useFrame(({ clock }) => {
-    const time = clock.getElapsedTime();
+    const t = clock.getElapsedTime();
     if (meshRef.current) {
-      meshRef.current.position.y = Math.cos(time) * 2;
+      meshRef.current.rotation.x = Math.cos(t);
+      meshRef.current.rotation.y = Math.sin(t);
     }
   });
 
   return (
-    <Box ref={meshRef} args={[1, 1, 1]}>
-      <meshStandardMaterial attach="material" color="royalblue" />
-    </Box>
+    <mesh ref={meshRef}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial color="purple" />
+    </mesh>
   );
 };
 
-// Component to manage PointerLockControls
-const PointerLockControlsWrapper = () => {
-  const controlsRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
+const Dashboard = () => {
+  const { currentUser } = useSelector(selectAuth);
+
+  const flyControlsRef = useRef(null);
 
   useEffect(() => {
-    if (cameraRef.current && rendererRef.current) {
-      const controls = new PointerLockControls(cameraRef.current, rendererRef.current.domElement);
-      controlsRef.current = controls;
-      controls.lock();
-      return () => {
-        controls.dispose();
-      };
+    if (flyControlsRef.current) {
+      flyControlsRef.current.movementSpeed = 10;
+      flyControlsRef.current.rollSpeed = 0.5;
     }
-  }, []);
+  }, [flyControlsRef]);
 
-  return null;
-};
-
-// Dashboard component
-const Dashboard = () => {
   return (
-    <Canvas>
-      <ambientLight />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <AnimatedBox />
-      <PointerLockControlsWrapper />
-    </Canvas>
+    <div className="h-screen w-screen mt-32">
+      <p className="text-lg font-bold">
+        Hi, {currentUser.displayName} !
+      </p>
+      <Canvas className="h-[90%] w-[90vw]">
+        <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+        <FlyControls ref={flyControlsRef} autoForward={false} />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1} />
+        <RotatingBox />
+      </Canvas>
+
+    </div>
   );
 };
 

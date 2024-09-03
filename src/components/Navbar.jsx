@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white bg-opacity-0 backdrop-blur-[12px] shadow-md z-50">
-      <div className="container mx-auto flex items-center justify-between xs:p-4 md:p-0">
+      <div className="container mx-auto flex items-center justify-between xs:p-4 md:px-4">
         <Link className="flex items-center" to="/">
           <img src="logo/side.png" width={200} alt="EcoAdventureLogo" />
         </Link>
