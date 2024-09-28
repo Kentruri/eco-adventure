@@ -1,21 +1,36 @@
 import '@/App.css';
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { useLoader } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from 'three';
 
 const Model = () => {
-  const gltf = useLoader(GLTFLoader, "/models/humpback_rig_render.glb");
+  const gltf = useLoader(GLTFLoader, "/models/fishing.glb");
+
+  const mixer = useRef(null);
 
   useEffect(() => {
+
     gltf.scene.traverse((child) => {
       if (child.isMesh) {
         child.material.side = THREE.DoubleSide;
       }
     });
+
+    mixer.current = new THREE.AnimationMixer(gltf.scene);
+
+    gltf.animations.forEach((clip) => {
+      const action = mixer.current.clipAction(clip);
+      action.play();
+    });
   }, [gltf]);
+
+  useFrame((state, delta) => {
+    if (mixer.current) {
+      mixer.current.update(delta);
+    }
+  });
 
   return <primitive object={gltf.scene} />;
 };
@@ -33,10 +48,10 @@ const LandingPage = () => {
 
         <PerspectiveCamera
           makeDefault
-          position={[6, 2, 7]}  
-          fov={75}          
-          near={0.5}          
-          far={1000}            
+          position={[6, 2, 7]}
+          fov={75}
+          near={0.5}
+          far={1000}
         />
 
         <Model />
