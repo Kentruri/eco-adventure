@@ -1,11 +1,13 @@
+import { vi } from 'vitest';
+import '@testing-library/jest-dom';
 HTMLCanvasElement.prototype.getContext = (type) => {
   if (type === '2d') {
     return {
       fillRect: () => { },
       clearRect: () => { },
-      getImageData: () => { return { data: [] }; },
+      getImageData: () => ({ data: [] }),
       putImageData: () => { },
-      createImageData: () => { return []; },
+      createImageData: () => [],
       setTransform: () => { },
       drawImage: () => { },
       save: () => { },
@@ -21,7 +23,7 @@ HTMLCanvasElement.prototype.getContext = (type) => {
       rotate: () => { },
       arc: () => { },
       fill: () => { },
-      measureText: () => { return { width: 0 }; },
+      measureText: () => ({ width: 0 }),
       transform: () => { },
       rect: () => { },
       clip: () => { },
@@ -37,22 +39,22 @@ HTMLCanvasElement.prototype.getContext = (type) => {
       clearDepth: () => { },
       clearStencil: () => { },
       clear: () => { },
-      createShader: () => { return {}; },
+      createShader: () => ({}),
       shaderSource: () => { },
       compileShader: () => { },
-      createProgram: () => { return {}; },
+      createProgram: () => ({}),
       attachShader: () => { },
       linkProgram: () => { },
       useProgram: () => { },
-      getProgramParameter: () => { return true; },
-      getShaderParameter: () => { return true; },
-      createBuffer: () => { return {}; },
+      getProgramParameter: () => true,
+      getShaderParameter: () => true,
+      createBuffer: () => ({}),
       bindBuffer: () => { },
       bufferData: () => { },
       viewport: () => { },
       drawArrays: () => { },
       drawElements: () => { },
-      getUniformLocation: () => { return {}; },
+      getUniformLocation: () => ({}),
       uniformMatrix4fv: () => { },
       uniform4fv: () => { },
       uniform1i: () => { },
@@ -61,8 +63,43 @@ HTMLCanvasElement.prototype.getContext = (type) => {
       texParameteri: () => { },
       texImage2D: () => { },
       generateMipmap: () => { },
-      createTexture: () => { return {}; },
+      createTexture: () => ({}),
     };
   }
   return null;
 };
+
+vi.mock('@react-three/fiber', () => {
+  return {
+    Canvas: ({ children }) => <div>{children}</div>,
+    useFrame: vi.fn(), 
+    useLoader: vi.fn(() => ({
+      scene: {
+        traverse: vi.fn(),
+      },
+      animations: [],
+    })),
+  };
+});
+
+vi.mock('@react-three/drei', () => {
+  return {
+    OrbitControls: () => null, 
+    PerspectiveCamera: ({ children }) => <>{children}</>,
+    FlyControls: vi.fn().mockImplementation(({ ref }) => <div ref={ref} />), 
+  };
+});
+
+vi.mock('three', () => {
+  const originalThree = vi.importActual('three');
+  return {
+    ...originalThree,
+    AnimationMixer: vi.fn().mockReturnValue({
+      clipAction: vi.fn().mockReturnValue({
+        play: vi.fn(),
+      }),
+      update: vi.fn(),
+    }),
+    DoubleSide: 'DoubleSide',
+  };
+});
