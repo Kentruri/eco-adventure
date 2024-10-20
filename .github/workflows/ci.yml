@@ -3,10 +3,10 @@ name: Build and analyze with SonarCloud
 on:
   push:
     branches:
-      - DDS
+      - main
   pull_request:
     branches:
-      - DDS
+      - main
 
 jobs:
   build:
