@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 20
 
@@ -35,7 +35,16 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
 
-      - name: SonarQube Scan
+      - name: Install Sonar Scanner
+        run: npm install -g sonar-scanner
+
+      - name: Run SonarQube analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-        run: npm run sonar
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=ecoadventure \
+            -Dsonar.sources=./src \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
