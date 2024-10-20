@@ -1,0 +1,6 @@
+projectKey=eco-adventure
+serverUrl=http://localhost:9000
+serverVersion=10.7.0.96327
+dashboardUrl=http://localhost:9000/dashboard?id=eco-adventure
+ceTaskId=106fcf0e-f16b-4a9a-aaf2-b7708596a399
+ceTaskUrl=http://localhost:9000/api/ce/task?id=106fcf0e-f16b-4a9a-aaf2-b7708596a399
