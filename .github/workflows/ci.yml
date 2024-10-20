@@ -14,33 +14,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Clonar el repositorio completo
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Para mejorar la relevancia del análisis de SonarQube
+          fetch-depth: 0 
 
-      # Configurar Java 17 para SonarCloud
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      # Verificar que Java 17 esté instalado correctamente
-      - name: Verify Java version
-        run: java -version
-
-      # Configurar Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # Instalar dependencias
       - name: Install dependencies
         run: npm install
 
-      # Ejecutar pruebas y generar cobertura
       - name: Run tests with coverage
         run: npm run coverage
         env:
@@ -52,7 +37,6 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
 
-      # Análisis de SonarCloud
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@v3
         env:
