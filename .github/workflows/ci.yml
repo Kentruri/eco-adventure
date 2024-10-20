@@ -24,7 +24,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Paso para ejecutar las pruebas con cobertura
       - name: Run tests with coverage
         run: npm run coverage
         env:
@@ -36,12 +35,7 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
 
-      # Usar la acción oficial de SonarQube
       - name: SonarQube Scan
-        uses: sonarsource/sonarcloud-github-action@v1.5
-        with:
-          projectBaseDir: .
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://localhost:9000
-          SONAR_PROJECT_KEY: ecoadventure
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+        run: npm run sonar
