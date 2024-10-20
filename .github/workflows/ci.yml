@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Paso para ejecutar las pruebas con cobertura
       - name: Run tests with coverage
         run: npm run coverage
         env:
@@ -35,21 +36,12 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
 
-      - name: Install SonarScanner
-        run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-          unzip sonar-scanner.zip
-          export PATH="$PATH:$(pwd)/sonar-scanner-4.7.0.2747-linux/bin"
-
+      # Usar la acción oficial de SonarQube
       - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@v1.5
+        with:
+          projectBaseDir: .
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=ecoadventure \
-            -Dsonar.sources=src \
-            -Dsonar.tests=src \
-            -Dsonar.test.inclusions=**/*.test.js,**/*.test.jsx,**/*.spec.js \
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov-report/lcov.info \
-            -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: http://localhost:9000
+          SONAR_PROJECT_KEY: ecoadventure
