@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "sonar": "sonar-scanner",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
