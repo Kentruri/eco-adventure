@@ -10,6 +10,7 @@ import Dashboard from '@/components/Dashboard';
 import LadingPage from '@/components/LandingPage';
 import Navbar from '@/components/Navbar';
 import SignUp from '@/components/SignUp';
+import WaterPollution from "@/components/WaterPollution.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +26,14 @@ function App() {
     <Router>
       <Navbar/>
       <Routes>
+        <Route
+          path="/pollution"
+          element={
+              <AuthRoute>
+                  <WaterPollution/>
+              </AuthRoute>
+          }
+        />
         <Route
           path="/login"
           element={
