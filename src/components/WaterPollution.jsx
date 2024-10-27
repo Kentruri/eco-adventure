@@ -70,7 +70,7 @@ function WaterPollutionContent() {
 
                 <PerspectiveCamera
                     makeDefault
-                    position={[6, 2, 7]}
+                    position={[12, 6, 19]}
                     fov={75}
                     near={0.5}
                     far={1000}
