@@ -11,6 +11,7 @@ import LadingPage from '@/components/LandingPage';
 import Navbar from '@/components/Navbar';
 import SignUp from '@/components/SignUp';
 import WaterPollution from "@/components/WaterPollution.jsx";
+import OceanAcidification from "@/components/OceanAcidification.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,6 +34,14 @@ function App() {
                   <WaterPollution/>
               </AuthRoute>
           }
+        />
+        <Route
+          path="/acidification"
+          element={
+            <AuthRoute>
+                <OceanAcidification/>
+            </AuthRoute>
+          } 
         />
         <Route
           path="/login"
