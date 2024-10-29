@@ -9,9 +9,12 @@ import Login from "@/components/Login.jsx";
 import Dashboard from '@/components/Dashboard';
 import LadingPage from '@/components/LandingPage';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import SignUp from '@/components/SignUp';
 import WaterPollution from "@/components/WaterPollution.jsx";
 import OceanAcidification from "@/components/OceanAcidification.jsx";
+import AboutUs from '@/components/AboutUs';
+import Mission from '@/components/Mission';
 
 function App() {
   const dispatch = useDispatch();
@@ -71,6 +74,16 @@ function App() {
           }
         />
         <Route
+          path="/about-us"
+          element={
+            <AuthRoute>
+
+              <AboutUs />
+              <Mission/>
+            </AuthRoute>
+          }
+        />
+        <Route
           path="/"
           element={
             <AuthRoute>
@@ -80,6 +93,7 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <Footer/>
     </Router>
   );
 }
