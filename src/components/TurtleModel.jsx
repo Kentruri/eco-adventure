@@ -36,7 +36,7 @@ const TurtleModel = () => {
       if (!isRotating.current) {
         turtleRef.current.position.x += 0.01 * direction;
 
-        if (turtleRef.current.position.x > 6 || turtleRef.current.position.x < 0) {
+        if (turtleRef.current.position.x > 4 || turtleRef.current.position.x < 0) {
           isRotating.current = true; 
           rotationProgress.current = 0; 
         }
