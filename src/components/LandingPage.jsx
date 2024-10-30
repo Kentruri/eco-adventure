@@ -63,7 +63,7 @@ const LandingPage = () => {
     "inset-0",      
     "top-20 left-8", 
     "bottom-8 left-8", 
-    "top-24 right-8", 
+    "inset-0", 
   ];
 
   const exitAnimation = "transform -translate-y-32 opacity-0 transition-all duration-500 ease-in-out";
