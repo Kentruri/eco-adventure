@@ -11,8 +11,6 @@ import LadingPage from '@/components/LandingPage';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SignUp from '@/components/SignUp';
-import WaterPollution from "@/components/WaterPollution.jsx";
-import OceanAcidification from "@/components/OceanAcidification.jsx";
 import AboutUs from '@/components/AboutUs';
 import Mission from '@/components/Mission';
 
@@ -30,22 +28,7 @@ function App() {
     <Router>
       <Navbar/>
       <Routes>
-        <Route
-          path="/pollution"
-          element={
-              <AuthRoute>
-                  <WaterPollution/>
-              </AuthRoute>
-          }
-        />
-        <Route
-          path="/acidification"
-          element={
-            <AuthRoute>
-                <OceanAcidification/>
-            </AuthRoute>
-          } 
-        />
+       
         <Route
           path="/login"
           element={
