@@ -16,17 +16,29 @@ const Navbar = () => {
         <Link className="flex items-center" to="/">
           <img src="logo/side.png" width={200} alt="EcoAdventureLogo" />
         </Link>
+
+        <div>
+          <>
+            <Link
+              to="/problems"
+              className={`text-lg font-semibold ${isActive('/problems') ? 'text-dark-blue' : 'text-gray-700'
+                } hover:text-dark-blue transition-colors`}
+            >
+              <button class="bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-0">
+                Problemas ambientales
+              </button>
+            </Link>
+          </>
+        </div>
         <div className="flex space-x-4 items-center">
           {!userLoggedIn ? (
             <>
               <Link
                 to="/about-us"
-                className={`text-lg font-semibold ${isActive('/login') ? 'text-dark-blue' : 'text-gray-700'
+                className={`text-lg font-semibold ${isActive('/about-us') ? 'text-dark-blue' : 'text-gray-700'
                   } hover:text-dark-blue transition-colors`}
               >
-                <button class="bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-0">
-                  About Us
-                </button>
+                About us
               </Link>
               <Link
                 to="/login"
