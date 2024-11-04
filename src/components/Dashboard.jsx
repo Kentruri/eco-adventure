@@ -46,10 +46,10 @@ const Dashboard = () => {
 
 
   return (
-    <div className="h-screen w-screen mt-32">
-      <p className="text-lg font-bold">
+    <div className="h-screen  mt-32 ">
+      <span className="text-lg font-bold w-[500px] text-center   overflow-hidden flex ml-10">
         Hi, {currentUser.displayName || getDisplayName(currentUser.email)} !
-      </p>
+      </span>
       <Canvas className="h-[90%] w-[90vw]">
         <PerspectiveCamera makeDefault position={[0, 0, 5]} />
         <FlyControls ref={flyControlsRef} autoForward={false} />

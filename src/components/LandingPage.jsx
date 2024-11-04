@@ -20,7 +20,7 @@ const LandingPage = () => {
   const handleCameraTransition = (nextStep) => {
     const positions = [
       { x: 1, y: 1, z: 1 },
-      { x: 0, y: 5, z: 15 },
+      { x: 1, y: 5, z: 15 },
       { x: -5, y: 3, z: -10 },
       { x: 5, y: -4, z: -10 },
     ];

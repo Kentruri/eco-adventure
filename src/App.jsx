@@ -13,6 +13,7 @@ import Footer from '@/components/Footer';
 import SignUp from '@/components/SignUp';
 import AboutUs from '@/components/AboutUs';
 import Mission from '@/components/Mission';
+import Problems from '@/components/Problems';
 
 function App() {
   const dispatch = useDispatch();
@@ -27,8 +28,15 @@ function App() {
   return (
     <Router>
       <Navbar/>
-      <Routes>
-       
+
+      <Routes className="mt-[120px]">
+        <Route
+          path="/problems"
+          element={
+            <Problems/>
+          }
+
+        />
         <Route
           path="/login"
           element={
@@ -76,7 +84,7 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }
