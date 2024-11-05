@@ -1,11 +1,13 @@
 import TapWaterModel from "@/components/TapWaterModel";
-import { Environment } from "@react-three/drei";
+import { Environment, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 
 const Shortage = () => {
   const [cameraPosition, setCameraPosition] = useState({ x: -6, y: 0, z: -1 });
+  const [htmlPosition, setHtmlPosition] = useState([1.5, 6, 9]); // Estado para la posición del Html
+  const [htmlRotation, setHtmlRotation] = useState([0, 4.5, 0]); // Estado para la rotación del Html
   const [stopAnimation, setStopAnimation] = useState(false);
   const cameraRef = useRef();
   const modelRef = useRef();
@@ -50,11 +52,36 @@ const Shortage = () => {
       duration: 2,
     });
 
+    // Actualizamos la posición y rotación del Html usando el estado
+    setHtmlPosition([10, 7, -2]);
+    setHtmlRotation([0, -0.6, 0]);
+
     setStopAnimation(true);
     setStep(3);
   };
 
   const handleOpenValve = () => {
+    gsap.to(cameraRef.current.position, {
+      x: -6,
+      y: 0,
+      z: -1,
+      duration: 2,
+      onUpdate: () => {
+        cameraRef.current.lookAt(0, 0, 0);
+      },
+    });
+
+    gsap.to(modelRef.current.position, {
+      x: -5.1,
+      y: -0.4,
+      z: -1.58,
+      duration: 2,
+    });
+
+    // Restauramos la posición y rotación iniciales del Html
+    setHtmlPosition([1.5, 6, 9]);
+    setHtmlRotation([0, 4.5, 0]);
+
     setStopAnimation(false);
   };
 
@@ -69,6 +96,20 @@ const Shortage = () => {
       );
     }
   }, [step]);
+
+  // Event listener para las teclas de flecha
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "ArrowLeft") {
+        handleCloseValve();
+      } else if (event.key === "ArrowRight") {
+        handleOpenValve();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
 
   return (
     <div className="relative flex flex-col items-center">
@@ -89,8 +130,9 @@ const Shortage = () => {
         </div>
       </div>
 
-      <div className="relative w-full h-[100vh]">
+      <div className="relative w-full h-[100vh] min-h-[1000px]">
         <Canvas
+          shadows
           onCreated={({ camera }) => {
             cameraRef.current = camera;
             camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
@@ -98,8 +140,21 @@ const Shortage = () => {
           }}
         >
           <ambientLight intensity={1.5} />
-          <pointLight color="white" position={[0, 2, 0]} intensity={1.5} distance={5} />
+          <pointLight castShadow color="white" position={[0, 2, 0]} intensity={1.5} distance={5} />
           <Environment preset="sunset" background />
+
+          <Html
+            position={htmlPosition}
+            rotation={htmlRotation}
+            transform
+            occlude
+          >
+            <h1 className="text-3xl font-bold text-white" style={{ textShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}>
+              Sensibilización
+            </h1>
+          </Html>
+
+          {/* Modelo con sombras activadas */}
           <TapWaterModel ref={modelRef} position={[-5.1, -0.4, -1.58]} stopAnimation={stopAnimation} />
         </Canvas>
 
@@ -110,7 +165,6 @@ const Shortage = () => {
               ref={stepRefs[0]}
               className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl"
             >
-              <h1 className="text-4xl font-bold mb-6 text-black">Sensibilización - Paso 1</h1>
               <p className="text-lg mb-8 text-black">
                 Cada gota que se pierde representa una oportunidad desaprovechada de mantener el equilibrio natural y asegurar el bienestar de nuestras comunidades.
               </p>
@@ -151,7 +205,7 @@ const Shortage = () => {
           {step >= 3 && (
             <div
               ref={stepRefs[2]}
-              className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl  mr-[10%]"
+              className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl mr-[10%]"
             >
               <p className="text-lg mb-8 text-black">
                 Cerrar la llave y cuidar el agua es un compromiso para asegurar la vida en el planeta. Cada acción cuenta.
