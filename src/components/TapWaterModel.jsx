@@ -3,14 +3,13 @@ import { useLoader, useFrame } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from 'three';
 
-const TapWaterModel = ({ position = [0, 0, 0] }) => { 
+const TapWaterModel = React.forwardRef(({ position, stopAnimation, animationSpeed = 8 }, ref) => {
   const gltf = useLoader(GLTFLoader, "/models/tap_water_dripping.glb");
   const mixer = useRef(null);
 
   useEffect(() => {
     gltf.scene.traverse((child) => {
       if (child.isMesh) {
-        // Ocultar elementos de agua
         if (
           child.name === "pPipe4_water_0" ||
           child.name === "pCylinder1_water_0" ||
@@ -28,15 +27,30 @@ const TapWaterModel = ({ position = [0, 0, 0] }) => {
       const action = mixer.current.clipAction(clip);
       action.play();
     });
-  }, [gltf]);
+
+    mixer.current.timeScale = animationSpeed;
+  }, [gltf, animationSpeed]);
+
+  useEffect(() => {
+    if (mixer.current) {
+      if (stopAnimation) {
+        mixer.current.stopAllAction();
+      } else {
+        gltf.animations.forEach((clip) => {
+          const action = mixer.current.clipAction(clip);
+          action.play();
+        });
+      }
+    }
+  }, [stopAnimation, gltf]);
 
   useFrame((state, delta) => {
-    if (mixer.current) {
+    if (mixer.current && !stopAnimation) {
       mixer.current.update(delta);
     }
   });
 
-  return <primitive object={gltf.scene} position={position} />; 
-};
+  return <primitive object={gltf.scene} ref={ref} position={position} />;
+});
 
 export default TapWaterModel;
