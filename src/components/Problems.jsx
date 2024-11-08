@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Shortage from "@/components/Shortage";
+import Shortage2 from "./Shortage2";
 
 const Problems = () => {
   const [activeTab, setActiveTab] = useState('Escasez');
@@ -42,7 +43,7 @@ const Problems = () => {
       </div>
       <div className="bg-gray-50 100vh">
         {activeTab === 'Escasez' && <Shortage />}
-        {activeTab === 'Acidificación' && <p className="h-[100vh]">Contenido relacionado con la acidificación.</p>}
+        {activeTab === 'Acidificación' && <Shortage2 />}
         {activeTab === 'Contaminación' && <p className="h-[100vh]">Contenido relacionado con la contaminación.</p>}
       </div>
     </div>
