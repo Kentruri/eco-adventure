@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera, OrbitControls } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import WaterPollutionModel from './WaterPollutionModel';
 
 const WaterPollution = () => {
     const cameraRef = useRef();
+    const controlsRef = useRef(); // Reference to OrbitControls
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
@@ -88,17 +89,19 @@ const WaterPollution = () => {
     return (
         <div className="w-full h-[100vh] relative">
             <Canvas className="h-[90vh] w-[90vw]" style={{ background: 'white' }}>
-                {/* Cambié el color de la luz ambiental a blanco */}
+                {/* Luz ambiental blanca */}
                 <ambientLight color="white" intensity={1} />
                 <directionalLight color="white" position={[10, 10, 10]} intensity={1} />
                 <PerspectiveCamera
                     ref={cameraRef}
                     makeDefault
-                    position={[1, 1, 1]}
+                    position={[1, 1, 1]} // Ajusta la posición inicial de la cámara
                     fov={75}
                     near={0.5}
                     far={1000}
                 />
+                {/* Agregar controles para navegar dentro del modelo */}
+                <OrbitControls ref={controlsRef} />
                 <WaterPollutionModel position={[0, 0, 0]} />
             </Canvas>
 
