@@ -2,7 +2,7 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import WaterPollutionModel from './WaterPollutionModel';
 
-function App() {
+function WaterPollution() {
     return (
         <div className="h-[100vh]">
         <Canvas>
@@ -14,4 +14,4 @@ function App() {
     );
 }
 
-export default App;
+export default WaterPollution;
