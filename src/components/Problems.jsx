@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Shortage from "@/components/Shortage";
-import WaterPollution from "@/components/WaterPollution.jsx";
+import WaterPollution from "@/components/WaterPollution";
 
 const Problems = () => {
   const [activeTab, setActiveTab] = useState('Escasez');

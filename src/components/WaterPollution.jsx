@@ -1,8 +1,17 @@
 import React from 'react';
-import WaterPollutionModel from '@/components/WaterPollutionModel.jsx';
+import { Canvas } from '@react-three/fiber';
+import WaterPollutionModel from './WaterPollutionModel';
 
-export default function WaterPollution() {
+function App() {
     return (
-        <WaterPollutionModel position={[0, 0, 0]} stopAnimation={false} animationSpeed={1} />
+        <div className="h-[100vh]">
+        <Canvas>
+        <ambientLight intensity={1.5} />
+          <pointLight castShadow color="white" position={[0, 2, 0]} intensity={1.5} distance={5} />
+            <WaterPollutionModel position={[0, 0, 0]} />
+        </Canvas>
+        </div>
     );
 }
+
+export default App;
