@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Shortage from "@/components/Shortage";
+import WaterPollution from "@/components/WaterPollution";
 
 const Problems = () => {
   const [activeTab, setActiveTab] = useState('Escasez');
@@ -43,7 +44,7 @@ const Problems = () => {
       <div className="bg-gray-50 100vh">
         {activeTab === 'Escasez' && <Shortage />}
         {activeTab === 'Acidificación' && <p className="h-[100vh]">Contenido relacionado con la acidificación.</p>}
-        {activeTab === 'Contaminación' && <p className="h-[100vh]">Contenido relacionado con la contaminación.</p>}
+        {activeTab === 'Contaminación' && <WaterPollution />}
       </div>
     </div>
   );
