@@ -11,7 +11,6 @@ const TapWaterModel = React.forwardRef(({ position, stopAnimation, animationSpee
   useEffect(() => {
     gltf.scene.traverse((child) => {
       if (child.isMesh) {
-        // Activar sombras en cada malla del modelo
         child.castShadow = true;
         child.receiveShadow = true;
 
