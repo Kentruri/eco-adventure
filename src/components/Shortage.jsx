@@ -6,8 +6,8 @@ import { gsap } from "gsap";
 
 const Shortage = () => {
   const [cameraPosition, setCameraPosition] = useState({ x: -6, y: 0, z: -1 });
-  const [htmlPosition, setHtmlPosition] = useState([1.5, 6, 9]); // Estado para la posición del Html
-  const [htmlRotation, setHtmlRotation] = useState([0, 4.5, 0]); // Estado para la rotación del Html
+  const [htmlPosition, setHtmlPosition] = useState([1.5, 6, 9]);
+  const [htmlRotation, setHtmlRotation] = useState([0, 4.5, 0]);
   const [stopAnimation, setStopAnimation] = useState(false);
   const cameraRef = useRef();
   const modelRef = useRef();
@@ -31,17 +31,74 @@ const Shortage = () => {
   };
 
   const handleNextStep = () => {
-    const currentRef = stepRefs[step - 1].current;
-    if (currentRef) {
-      gsap.to(currentRef, {
-        y: -100,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.in",
-        onComplete: () => {
-          setStep((prevStep) => Math.min(prevStep + 1, 3));
-        },
-      });
+    if (step < 3) {
+      const currentRef = stepRefs[step - 1].current;
+      if (currentRef) {
+        gsap.to(currentRef, {
+          y: -100,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.in",
+          onComplete: () => {
+            const nextStep = step + 1;
+            setStep(nextStep);
+
+            // Mover la cámara si es el paso 2 hacia el 3
+            if (nextStep === 3) {
+              gsap.to(cameraRef.current.position, {
+                x: -2,
+                y: 0,
+                z: 4,
+                duration: 2,
+                onUpdate: () => {
+                  cameraRef.current.lookAt(0, 0, 0);
+                },
+              });
+
+              gsap.to(modelRef.current.position, {
+                x: -2.1,
+                y: -0.4,
+                z: 3.58,
+                duration: 2,
+              });
+
+              setHtmlPosition([10, 7, -2]);
+              setHtmlRotation([0, -0.6, 0]);
+              setStopAnimation(true);
+            }
+          },
+        });
+      }
+    }
+  };
+
+  const handlePreviousStep = () => {
+    if (step > 1) {
+      setStep((prevStep) => prevStep - 1);
+
+      if (step === 3) {
+        // Si volvemos del paso 3 al 2, reabrimos la válvula
+        gsap.to(cameraRef.current.position, {
+          x: -6,
+          y: 0,
+          z: -1,
+          duration: 2,
+          onUpdate: () => {
+            cameraRef.current.lookAt(0, 0, 0);
+          },
+        });
+
+        gsap.to(modelRef.current.position, {
+          x: -5.1,
+          y: -0.4,
+          z: -1.58,
+          duration: 2,
+        });
+
+        setHtmlPosition([1.5, 6, 9]);
+        setHtmlRotation([0, 4.5, 0]);
+        setStopAnimation(false);
+      }
     }
   };
 
@@ -71,10 +128,8 @@ const Shortage = () => {
             duration: 2,
           });
 
-          // Actualizamos la posición y rotación del Html usando el estado
           setHtmlPosition([10, 7, -2]);
           setHtmlRotation([0, -0.6, 0]);
-
           setStopAnimation(true);
           setStep(3);
         },
@@ -97,14 +152,16 @@ const Shortage = () => {
   // Event listener para las teclas de flecha
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === "ArrowLeft") {
-        handleCloseValve();
+      if (event.key === "ArrowRight") {
+        handleNextStep();
+      } else if (event.key === "ArrowLeft") {
+        handlePreviousStep();
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
+  }, [step]);
 
   return (
     <div className="relative flex flex-col items-center">
@@ -200,12 +257,12 @@ const Shortage = () => {
           {step >= 3 && (
             <div
               ref={stepRefs[2]}
-              className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl mr-[10%] absolute top-[100px]"
+              className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl"
             >
               <p className="text-lg mb-8 text-black">
                 Cerrar la llave y cuidar el agua es un compromiso para asegurar la vida en el planeta. Cada acción cuenta.
               </p>
-              <div className="flex justify-center space-x-4 w-full">
+              <div className="flex justify-center w-full">
                 <button
                   onClick={() => handleScroll("down")}
                   className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition duration-300"
@@ -215,29 +272,6 @@ const Shortage = () => {
               </div>
             </div>
           )}
-        </div>
-      </div>
-
-      <div className="w-full h-[100vh] flex items-center justify-center bg-gray-200 relative">
-        <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl">
-          <h1 className="text-4xl font-bold mb-6 text-black">Acciones</h1>
-          <p className="text-lg mb-8 text-black">
-            En esta última sección, reflexiona sobre lo que has aprendido y cómo puedes aplicar estos conocimientos en tu vida diaria.
-          </p>
-          <div className="flex justify-center space-x-4 w-full">
-            <button
-              onClick={() => handleScroll("up")}
-              className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full transition duration-300"
-            >
-              Volver atrás
-            </button>
-            <button
-              onClick={() => handleScroll("top")}
-              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition duration-300"
-            >
-              Volver al inicio
-            </button>
-          </div>
         </div>
       </div>
     </div>
