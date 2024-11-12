@@ -40,22 +40,27 @@ const WaterPollution = () => {
         setIsExiting(true);
         setHasInteracted(true);
 
-        if (nextStep === 2) {
-            setContent({
+        // Cambia el contenido según el paso
+        const contents = [
+            {
+                title: "La contaminación del agua: un problema global",
+                text: "La contaminación del agua afecta a millones de personas en todo el mundo. Desde plásticos hasta productos químicos tóxicos, los cuerpos de agua están siendo destruidos, poniendo en peligro la vida de muchas especies, incluida la nuestra. Es esencial que comprendamos la magnitud de este problema para poder actuar de manera efectiva."
+            },
+            {
                 title: "Causas de la contaminación del agua",
-                text: "Las causas de la contaminación del agua son variadas. Desde el vertido industrial hasta el uso excesivo de pesticidas y fertilizantes en la agricultura, todo contribuye a la degradación de nuestros recursos hídricos. Esto no solo afecta a la fauna y la flora acuática, sino también a los seres humanos, que dependen de este recurso para su supervivencia.",
-            });
-        } else if (nextStep === 3) {
-            setContent({
+                text: "Las causas de la contaminación del agua son variadas. Desde el vertido industrial hasta el uso excesivo de pesticidas y fertilizantes en la agricultura, todo contribuye a la degradación de nuestros recursos hídricos. Esto no solo afecta a la fauna y la flora acuática, sino también a los seres humanos, que dependen de este recurso para su supervivencia."
+            },
+            {
                 title: "Soluciones para la contaminación del agua",
-                text: "Existen soluciones para mitigar la contaminación del agua. El reciclaje de plásticos, el tratamiento adecuado de aguas residuales y la reducción de la contaminación industrial son pasos cruciales. Además, la educación y la conciencia pública son fundamentales para fomentar un uso más responsable y sostenible del agua.",
-            });
-        } else if (nextStep === 4) {
-            setContent({
+                text: "Existen soluciones para mitigar la contaminación del agua. El reciclaje de plásticos, el tratamiento adecuado de aguas residuales y la reducción de la contaminación industrial son pasos cruciales. Además, la educación y la conciencia pública son fundamentales para fomentar un uso más responsable y sostenible del agua."
+            },
+            {
                 title: "¡Actúa ahora! Protege el agua",
-                text: "El futuro de nuestros ecosistemas acuáticos y nuestra salud dependen de las acciones que tomemos hoy. Involúcrate en la conservación del agua, apoya políticas públicas que promuevan la sostenibilidad y reduce tu propio impacto en el medio ambiente. Cada pequeña acción cuenta para hacer un cambio global.",
-            });
-        }
+                text: "El futuro de nuestros ecosistemas acuáticos y nuestra salud dependen de las acciones que tomemos hoy. Involúcrate en la conservación del agua, apoya políticas públicas que promuevan la sostenibilidad y reduce tu propio impacto en el medio ambiente. Cada pequeña acción cuenta para hacer un cambio global."
+            }
+        ];
+
+        setContent(contents[nextStep - 1]);
 
         setTimeout(() => {
             setStep(nextStep);
@@ -76,6 +81,21 @@ const WaterPollution = () => {
         return () => clearInterval(checkCanvas);
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'ArrowRight' && step < 4) {
+                handleCameraTransition(step + 1);
+            } else if (event.key === 'ArrowLeft' && step > 1) {
+                handleCameraTransition(step - 1);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [step]);
+
     const boxPositions = [
         'inset-0',
         'top-20 left-8',
@@ -89,18 +109,16 @@ const WaterPollution = () => {
     return (
         <div className="w-full h-[100vh] relative">
             <Canvas className="h-[90vh] w-[90vw]" style={{ background: 'white' }}>
-                {/* Luz ambiental blanca */}
                 <ambientLight color="white" intensity={1} />
                 <directionalLight color="white" position={[10, 10, 10]} intensity={1} />
                 <PerspectiveCamera
                     ref={cameraRef}
                     makeDefault
-                    position={[1, 1, 1]} // Ajusta la posición inicial de la cámara
+                    position={[1, 1, 1]}
                     fov={75}
                     near={0.5}
                     far={1000}
                 />
-                {/* Agregar controles para navegar dentro del modelo */}
                 <OrbitControls ref={controlsRef} />
                 <WaterPollutionModel position={[0, 0, 0]} />
             </Canvas>
