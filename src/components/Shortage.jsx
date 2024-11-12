@@ -31,58 +31,55 @@ const Shortage = () => {
   };
 
   const handleNextStep = () => {
-    setStep((prevStep) => Math.min(prevStep + 1, 3));
+    const currentRef = stepRefs[step - 1].current;
+    if (currentRef) {
+      gsap.to(currentRef, {
+        y: -100,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.in",
+        onComplete: () => {
+          setStep((prevStep) => Math.min(prevStep + 1, 3));
+        },
+      });
+    }
   };
 
   const handleCloseValve = () => {
-    gsap.to(cameraRef.current.position, {
-      x: -2,
-      y: 0,
-      z: 4,
-      duration: 2,
-      onUpdate: () => {
-        cameraRef.current.lookAt(0, 0, 0);
-      },
-    });
+    const currentRef = stepRefs[1].current;
+    if (currentRef) {
+      gsap.to(currentRef, {
+        y: -100,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.in",
+        onComplete: () => {
+          gsap.to(cameraRef.current.position, {
+            x: -2,
+            y: 0,
+            z: 4,
+            duration: 2,
+            onUpdate: () => {
+              cameraRef.current.lookAt(0, 0, 0);
+            },
+          });
 
-    gsap.to(modelRef.current.position, {
-      x: -2.1,
-      y: -0.4,
-      z: 3.58,
-      duration: 2,
-    });
+          gsap.to(modelRef.current.position, {
+            x: -2.1,
+            y: -0.4,
+            z: 3.58,
+            duration: 2,
+          });
 
-    // Actualizamos la posición y rotación del Html usando el estado
-    setHtmlPosition([10, 7, -2]);
-    setHtmlRotation([0, -0.6, 0]);
+          // Actualizamos la posición y rotación del Html usando el estado
+          setHtmlPosition([10, 7, -2]);
+          setHtmlRotation([0, -0.6, 0]);
 
-    setStopAnimation(true);
-    setStep(3);
-  };
-
-  const handleOpenValve = () => {
-    gsap.to(cameraRef.current.position, {
-      x: -6,
-      y: 0,
-      z: -1,
-      duration: 2,
-      onUpdate: () => {
-        cameraRef.current.lookAt(0, 0, 0);
-      },
-    });
-
-    gsap.to(modelRef.current.position, {
-      x: -5.1,
-      y: -0.4,
-      z: -1.58,
-      duration: 2,
-    });
-
-    // Restauramos la posición y rotación iniciales del Html
-    setHtmlPosition([1.5, 6, 9]);
-    setHtmlRotation([0, 4.5, 0]);
-
-    setStopAnimation(false);
+          setStopAnimation(true);
+          setStep(3);
+        },
+      });
+    }
   };
 
   // Animación de entrada para el cartel actual
@@ -102,8 +99,6 @@ const Shortage = () => {
     const handleKeyPress = (event) => {
       if (event.key === "ArrowLeft") {
         handleCloseValve();
-      } else if (event.key === "ArrowRight") {
-        handleOpenValve();
       }
     };
 
@@ -205,7 +200,7 @@ const Shortage = () => {
           {step >= 3 && (
             <div
               ref={stepRefs[2]}
-              className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl mr-[10%]"
+              className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl mr-[10%] absolute top-[100px]"
             >
               <p className="text-lg mb-8 text-black">
                 Cerrar la llave y cuidar el agua es un compromiso para asegurar la vida en el planeta. Cada acción cuenta.
@@ -216,12 +211,6 @@ const Shortage = () => {
                   className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition duration-300"
                 >
                   Seguir leyendo
-                </button>
-                <button
-                  onClick={handleOpenValve}
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition duration-300"
-                >
-                  Abrir llave
                 </button>
               </div>
             </div>
