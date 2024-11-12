@@ -52,10 +52,6 @@ const Shortage2 = () => {
     }
   };
 
-  const handleNextStep = () => {
-    setStep((prevStep) => Math.min(prevStep + 1, 3));
-  };
-
   const handleCloseValve = () => {
     gsap.to(cameraRef.current.position, {
       x: -2.5,
@@ -73,12 +69,6 @@ const Shortage2 = () => {
       z: 3.58,
       duration: 2,
     });
-
-    // Actualizamos la posición y rotación del Html usando el estado
-    // setHtmlPosition([10, 7, -2]);
-    // setHtmlRotation([0, -0.6, 0]);
-
-    // setStopAnimation(true);
     setStep(2);
   };
 
@@ -105,43 +95,8 @@ const Shortage2 = () => {
       z: 4.2,
       duration: 2,
     });
-
-    // Actualizamos la posición y rotación del Html usando el estado
-    // setHtmlPosition([10, 7, -2]);
-    // setHtmlRotation([0, -0.6, 0]);
-
-    // setStopAnimation(true);
     setStep(3);
   };
-
-  // const handleOpenValve = () => {
-  //   gsap.to(cameraRef.current.position, {
-  //     x: -6,
-  //     y: 0,
-  //     z: -1,
-  //     duration: 2,
-  //     onUpdate: () => {
-  //       cameraRef.current.lookAt(0, 0, 0);
-  //     },
-  //   });
-
-  //   gsap.to(modelRef.current.position, {
-  //     x: -5.1,
-  //     y: -0.4,
-  //     z: -1.58,
-  //     duration: 2,
-  //   });
-
-  //   // Restauramos la posición y rotación iniciales del Html
-  //   setHtmlPosition([1.5, 6, 9]);
-  //   setHtmlRotation([0, 4.5, 0]);
-
-  //   setStopAnimation(false);    // Actualizamos la posición y rotación del Html usando el estado
-  // setHtmlPosition([10, 7, -2]);
-  // setHtmlRotation([0, -0.6, 0]);
-
-  // setStopAnimation(true);
-  // };
 
   // Animación de entrada para el cartel actual
   useEffect(() => {
