@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { PerspectiveCamera, OrbitControls } from '@react-three/drei';
+import { PerspectiveCamera, OrbitControls, Html } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import WaterPollutionModel from './WaterPollutionModel';
 
 const WaterPollution = () => {
     const cameraRef = useRef();
-    const controlsRef = useRef(); // Reference to OrbitControls
+    const controlsRef = useRef();
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +40,6 @@ const WaterPollution = () => {
         setIsExiting(true);
         setHasInteracted(true);
 
-        // Cambia el contenido según el paso
         const contents = [
             {
                 title: "La contaminación del agua: un problema global",
@@ -114,13 +113,29 @@ const WaterPollution = () => {
                 <PerspectiveCamera
                     ref={cameraRef}
                     makeDefault
-                    position={[1, 1, 1]}
+                    position={[1, 1, 20]}
                     fov={75}
                     near={0.5}
                     far={1000}
                 />
                 <OrbitControls ref={controlsRef} />
-                <WaterPollutionModel position={[0, 0, 0]} />
+                <WaterPollutionModel position={[0, -7, 0]} />
+
+                {step === 1 && (
+                    <Html
+                        position={[1, 6, 9]}
+                        rotation={[0, 0, 0]}
+                        transform
+                        occlude
+                    >
+                        <h1
+                            className="text-4xl font-bold mb-6 text-purple-600"
+                            style={{ textShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
+                        >
+                            {content.title}
+                        </h1>
+                    </Html>
+                )}
             </Canvas>
 
             {isLoading ? (
@@ -132,11 +147,10 @@ const WaterPollution = () => {
                     className={`absolute ${boxPositions[step - 1]} flex flex-col items-center justify-center p-8
                         ${isExiting ? exitAnimation : ""}
                         ${isEntering ? enterAnimation : ""}
-                        ${!isExiting && !isEntering && "transform translate-y-0 opacity-100 transition-all duration-500 ease-in-out"}
-                    `}
+                        ${!isExiting && !isEntering && "transform translate-y-0 opacity-100 transition-all duration-500 ease-in-out"}`}
                 >
                     <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl fade">
-                        <h1 className="text-4xl font-bold mb-6 text-black">{content.title}</h1>
+                        {step !== 1 && <h1 className="text-4xl font-bold mb-6 text-black">{content.title}</h1>}
                         <p className="text-lg mb-8 text-black">{content.text}</p>
                         <div className="flex justify-center space-x-4 w-full">
                             {step > 1 && (
