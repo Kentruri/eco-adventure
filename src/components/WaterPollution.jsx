@@ -21,21 +21,34 @@ const WaterPollution = () => {
 
     const handleCameraTransition = (nextStep) => {
         const positions = [
-            { x: 1, y: 1, z: 1 },
-            { x: 1, y: 5, z: 15 },
-            { x: -5, y: 3, z: -10 },
-            { x: 5, y: -4, z: -10 },
+            { x: 1, y: 1, z: 20 },   // Paso 1
+            { x: 1, y: 5, z: 15 },   // Paso 2
+            { x: -5, y: 3, z: -10 }, // Paso 3
+            { x: 5, y: -4, z: -10 }, // Paso 4
         ];
 
-        gsap.to(cameraRef.current.position, {
-            x: positions[nextStep - 1].x,
-            y: positions[nextStep - 1].y,
-            z: positions[nextStep - 1].z,
-            duration: 2,
-            onUpdate: () => {
-                cameraRef.current.lookAt(0, 0, 0);
-            },
-        });
+        // Si el paso es 1, no hagas animación para volver a la posición original
+        if (nextStep === 1) {
+            gsap.to(cameraRef.current.position, {
+                x: positions[0].x,
+                y: positions[0].y,
+                z: positions[0].z,
+                duration: 0, // No animar, ir de inmediato
+                onUpdate: () => {
+                    cameraRef.current.lookAt(0, 0, 0);
+                },
+            });
+        } else {
+            gsap.to(cameraRef.current.position, {
+                x: positions[nextStep - 1].x,
+                y: positions[nextStep - 1].y,
+                z: positions[nextStep - 1].z,
+                duration: 2,
+                onUpdate: () => {
+                    cameraRef.current.lookAt(0, 0, 0);
+                },
+            });
+        }
 
         setIsExiting(true);
         setHasInteracted(true);
