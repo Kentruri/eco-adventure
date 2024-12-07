@@ -8,7 +8,7 @@ const AboutUs = () => {
     <div className="relative flex items-center justify-start h-[900px] bg-gray-100 overflow-hidden">
 
 
-      <div className="relative flex bg-white/50 backdrop-blur-lg ml-[10%] z-10 max-w-4xl w-[500px]  hover:translate-y-[-10px] transition-transform duration-1000 hover:cursor-pointer">
+      <div className="relative flex bg-slate-100 backdrop-blur-lg ml-[10%] z-10 max-w-4xl w-[500px]  hover:translate-y-[-10px] transition-transform duration-1000 hover:cursor-pointer">
         <div className="flex-1 pr-8 shadow-xl p-8 rounded-xl">
           <h1 className="text-5xl font-bold text-gray-900 mb-4 text-start ">
             Motivacion

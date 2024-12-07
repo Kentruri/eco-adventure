@@ -1,28 +1,8 @@
 
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/slices/auth";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera, FlyControls } from "@react-three/drei";
 import { useRef, useEffect } from "react";
-
-const RotatingBox = () => {
-  const meshRef = useRef(null);
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    if (meshRef.current) {
-      meshRef.current.rotation.x = Math.cos(t);
-      meshRef.current.rotation.y = Math.sin(t);
-    }
-  });
-
-  return (
-    <mesh ref={meshRef}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color="purple" />
-    </mesh>
-  );
-};
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { currentUser } = useSelector(selectAuth);
@@ -46,20 +26,43 @@ const Dashboard = () => {
 
 
   return (
-    <div className="h-screen  mt-32 ">
-      <span className="text-lg font-bold w-[500px] text-center   overflow-hidden flex ml-10">
-        Hi, {currentUser.displayName || getDisplayName(currentUser.email)} !
-      </span>
-      <Canvas className="h-[90%] w-[90vw]">
-        <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-        <FlyControls ref={flyControlsRef} autoForward={false} />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
-        <RotatingBox />
-      </Canvas>
+    <div className="h-screen flex">
+      <div className="flex flex-col items-start justify-center space-y-6 w-1/2 p-8 bg-slate-100 z-10 ">
+      <div class="flex flex-col items-start gap-4 ml-4 bg-opacity-[40%] bg-slate-100 shadow-md p-8">
+        <h1 className="text-3xl font-bold text-gray-800 ">
+          Hola, {currentUser.displayName || getDisplayName(currentUser.email)}!
+        </h1>
+        <p className="text-[20px] text-gray-700 text-left w-[550px]">
+          ¿Qué te parece si ponemos a prueba tus habilidades y testeamos tu
+          conocimiento en cuanto al cuidado del medio ambiente? ¡Anímate!
+        </p>
+        {/* Botones */}
+        <div className="flex space-x-4">
+            <Link to="/problems">
+              <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-none transition duration-300">
+                Aprender más
+              </button>
+            </Link>
+            <Link to="/quiz">
+              <button className="px-6 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-none transition duration-300">
+                Comenzar prueba
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
 
+      <div className="w-1/2 h-full relative">
+        <img
+          src="/turtle.jpg"
+          alt="Tortuga"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-0 left-0 w-1/4 h-full bg-gradient-to-r from-slate-100 to-transparent pointer-events-none"></div>
+      </div>
     </div>
   );
+
 };
 
 export default Dashboard;

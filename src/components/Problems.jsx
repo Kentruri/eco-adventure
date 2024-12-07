@@ -9,12 +9,10 @@ const Problems = () => {
   const activeIndex = tabs.indexOf(activeTab);
 
   useEffect(() => {
-    if (hasInteracted) {
       window.scrollBy({
-        top: 105,
+        top: 205,
         behavior: 'smooth'
       });
-    }
   }, [activeTab, hasInteracted]);
 
   const handleTabClick = (tab) => {
