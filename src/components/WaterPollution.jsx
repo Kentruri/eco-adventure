@@ -6,6 +6,21 @@ import { gsap } from 'gsap';
 import WaterPollutionModel from './WaterPollutionModel';
 
 const WaterPollution = () => {
+    useEffect(() => {
+        const audio = new Audio("/secondwater.mp3");
+        audio.loop = true;
+        audio.volume = 1;
+
+        audio.play().catch((error) => {
+            console.error("Error al reproducir el audio:", error);
+        });
+
+        return () => {
+            audio.pause();
+            audio.currentTime = 0;
+        };
+    }, []);
+
     const cameraRef = useRef();
     const controlsRef = useRef();
     const navigate = useNavigate();
