@@ -6,6 +6,7 @@ import CowModel from './CowModel'
 import CokeModel from './CokeModel'
 import TextileModel from './TextileModel'
 import TrashModel from './TrashModel'
+import QuestionTwo from './QuestionTwo';
 
 function DraggableObject({ name, onDrop, children, ...props }) {
   const ref = useRef()
@@ -67,6 +68,8 @@ const QuestionOne = () => {
   const [cowVisible, setCowVisible] = useState(true)
   const [message, setMessage] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [showQuestionTwo, setShowQuestionTwo] = useState(false);
+
 
   const handleDrop = (name) => {
     // Mapear nombres a industrias
@@ -97,6 +100,11 @@ const QuestionOne = () => {
   const closeModal = () => {
     setShowModal(false);
   };
+
+  if (showQuestionTwo) {
+    return <QuestionTwo />;
+  }
+
   return (
     <div
       style={{
@@ -202,7 +210,8 @@ const QuestionOne = () => {
             <button
               className="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
               onClick={() => {
-                // Lógica para la siguiente pregunta (angelica, añade tu redirect aquí)
+                setShowModal(false);  // Cierra el modal actual
+                setShowQuestionTwo(true);  // Activa la segunda pregunta
                 console.log("Siguiente pregunta");
               }}
             >
