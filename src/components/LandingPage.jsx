@@ -73,11 +73,10 @@ const LandingPage = () => {
     <div className="w-full h-[100vh] relative">
       <Canvas className="h-[90vh] w-[90vw]" style={{ background: 'white' }}>
         <ambientLight color="blue" intensity={1} />
-        <directionalLight color="white" position={[10, 10, 10]} intensity={1} />
-        <directionalLight color="white" position={[-10, -10, -10]} intensity={1} />
-        <directionalLight color="white" position={[10, -10, 10]} intensity={1} />
-        <directionalLight color="white" position={[-10, 10, 10]} intensity={1} />
-        <directionalLight color="white" position={[10, 10, -10]} intensity={1} />
+        <directionalLight color="white" position={[10, 10, 10]} intensity={2} />
+        <directionalLight color="white" position={[-10, -10, -10]} intensity={2} />
+        <ambientLight intensity={1} />
+
 
         <PerspectiveCamera
           ref={cameraRef}
