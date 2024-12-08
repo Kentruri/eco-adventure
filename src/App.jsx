@@ -14,6 +14,7 @@ import SignUp from '@/components/SignUp';
 import AboutUs from '@/components/AboutUs';
 import Mission from '@/components/Mission';
 import Problems from '@/components/Problems';
+import Quiz from '@/components/Quiz';
 
 function App() {
   const dispatch = useDispatch();
@@ -45,6 +46,15 @@ function App() {
                 <Login />
               </AuthRoute>
             )
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <PrivateRoute>
+
+              <Quiz />
+            </PrivateRoute>
           }
         />
         <Route
