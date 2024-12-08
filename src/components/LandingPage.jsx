@@ -16,6 +16,21 @@ const LandingPage = () => {
   const [isExiting, setIsExiting] = useState(false); // Controla la animación de salida
   const [isEntering, setIsEntering] = useState(false); // Controla la animación de entrada
   const [hasInteracted, setHasInteracted] = useState(false); // Marca si ha habido interacción
+  useEffect(() => {
+    const audio = new Audio("/fish.mp3");
+    audio.loop = true;
+    audio.volume = 1;
+
+    audio.play().catch((error) => {
+      console.error("Error al reproducir el audio:", error);
+    });
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
+
 
   const handleCameraTransition = (nextStep) => {
     const positions = [
