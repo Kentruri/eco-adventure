@@ -3,7 +3,7 @@ import { OrthographicCamera, Text } from '@react-three/drei';
 import React, { useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import BottleModel from './BottleModel';
-import BananaModel from './BananaModel'; // Reemplazado CokeModel por BananaModel
+import BananaModel from './BananaModel';
 import BatteryModel from './BatteryModel';
 import OceanModel from './OceanModel';
 
@@ -37,7 +37,6 @@ function DraggableObject({ name, onDrop, children, ...props }) {
           0
       );
     }
-
     setDragging(true);
     gl.domElement.style.cursor = 'grabbing';
   };
@@ -45,9 +44,7 @@ function DraggableObject({ name, onDrop, children, ...props }) {
   const onPointerUp = () => {
     setDragging(false);
     gl.domElement.style.cursor = 'auto';
-
-    const pos = ref.current.position;
-    onDrop(name, pos); // Pasar posición actual al soltar
+    onDrop(name, ref.current.position);
   };
 
   return (
@@ -58,34 +55,26 @@ function DraggableObject({ name, onDrop, children, ...props }) {
 }
 
 const QuestionTwo = () => {
-  const [bananaVisible] = useState(true); // Cambiado de cokeVisible a bananaVisible
-  const [batteryVisible] = useState(true);
-  const [bottleVisible] = useState(true);
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const handleDrop = (name, position) => {
-    const trashPosition = new THREE.Vector3(4, -2.5, 0);
-    const trashRadius = 2;
+    const oceanPosition = new THREE.Vector3(4, -2.5, 0);
+    const oceanRadius = 2;
 
-    const distanceToTrash = position.distanceTo(trashPosition);
+    const distanceToOcean = position.distanceTo(oceanPosition);
 
-    const industries = {
-      banana: 'industria de bebidas',
-      battery: 'industria de baterías',
-      bottle: 'industria ganadera',
-    };
+    if (distanceToOcean > oceanRadius) {
+      const industries = {
+        banana: 'industria de bebidas',
+        battery: 'industria de baterías',
+        bottle: 'industria ganadera',
+      };
 
-    if (distanceToTrash > trashRadius) {
-      const selectedIndustry = industries[name];
       const isCorrect = name === 'battery';
 
       setShowModal(true);
-      if (isCorrect) {
-        setMessage('industria de baterías');
-      } else {
-        setMessage(selectedIndustry);
-      }
+      setMessage(isCorrect ? 'battery' : industries[name]);
     }
   };
 
@@ -121,14 +110,8 @@ const QuestionTwo = () => {
               zoom={130}
           />
 
-          <hemisphereLight
-              skyColor={'#ffffff'}
-              groundColor={'#444444'}
-              intensity={0.8}
-              position={[0, 50, 0]}
-          />
+          <hemisphereLight skyColor={'#ffffff'} groundColor={'#444444'} intensity={0.8} />
           <directionalLight color="white" position={[10, 10, 10]} intensity={1} />
-          <directionalLight color="white" position={[1, 10, 0]} intensity={10} />
           <ambientLight intensity={2} />
 
           <Text
@@ -150,7 +133,7 @@ const QuestionTwo = () => {
               anchorX="left"
               anchorY="top"
           >
-            ¿Cuál de estos objetos es el MÁS contaminante para el agua? ¡Sácalo del Oceano!
+            ¿Cuál de estos objetos es el MÁS contaminante para el agua? ¡Sácalo del Océano!
             {"\n"}
             {"\n"}
             • Una botella de plástico.{"\n"}
@@ -160,38 +143,19 @@ const QuestionTwo = () => {
             Arrastra el objeto MÁS contaminante fuera del agua.
           </Text>
 
-          {bananaVisible && (
-              <DraggableObject name="banana" onDrop={handleDrop}>
-                <BananaModel
-                    position={[4.2, -1.9, 0]}
-                    scale={[2, 2, 2]}
-                    rotation={[0.5, 1, 0]}
-                />
-              </DraggableObject>
-          )}
-          {batteryVisible && (
-              <DraggableObject name="battery" onDrop={handleDrop}>
-                <BatteryModel
-                    position={[1, -2, 0]}
-                    scale={[0.3, 0.3, 0.3]}
-                    rotation={[1, Math.PI / 1, 0.5]}
-                />
-              </DraggableObject>
-          )}
-          {bottleVisible && (
-              <DraggableObject name="bottle" onDrop={handleDrop}>
-                <BottleModel
-                    position={[4, -2.5, 0]}
-                    rotation={[0, Math.PI / 0.6, 0]}
-                    scale={[0.5, 0.5, 0.5]}
-                />
-              </DraggableObject>
-          )}
-          <OceanModel
-              position={[4, -2.5, 0]}
-              rotation={[0, Math.PI / 0.6, 0]}
-              scale={[0.1, 0.3, 0.1]}
-          />
+          <DraggableObject name="banana" onDrop={handleDrop}>
+            <BananaModel position={[4.2, -1.9, 0]} scale={[2, 2, 2]} rotation={[0.5, 1, 0]} />
+          </DraggableObject>
+
+          <DraggableObject name="battery" onDrop={handleDrop}>
+            <BatteryModel position={[1, -2, 0]} scale={[0.3, 0.3, 0.3]} rotation={[1, Math.PI / 1, 0.5]} />
+          </DraggableObject>
+
+          <DraggableObject name="bottle" onDrop={handleDrop}>
+            <BottleModel position={[4, -2.5, 0]} rotation={[0, Math.PI / 0.6, 0]} scale={[0.5, 0.5, 0.5]} />
+          </DraggableObject>
+
+          <OceanModel position={[4, -2.5, 0]} rotation={[0, Math.PI / 0.6, 0]} scale={[0.1, 0.3, 0.1]} />
         </Canvas>
 
         {showModal && (
@@ -205,14 +169,12 @@ const QuestionTwo = () => {
                       <h1 className="text-4xl font-bold">
                         Acertaste, llevas 2/3 respuestas correctas
                       </h1>
-                      <p className="mt-4 text-lg">Faltan 1 preguntas más.</p>
+                      <p className="mt-4 text-lg">Falta 1 pregunta más.</p>
                     </>
                 ) : (
                     <>
                       <h1 className="text-4xl font-bold">Respuesta incorrecta</h1>
-                      <p className="mt-4 text-lg">
-                        Llevas 1/3 respuestas correctas. Faltan 1 más.
-                      </p>
+                      <p className="mt-4 text-lg">Llevas 1/3 respuestas correctas. Falta 1 más.</p>
                     </>
                 )}
                 <p className="mt-6 text-lg">
@@ -221,13 +183,10 @@ const QuestionTwo = () => {
                   • Una cáscara de fruta: <strong>contaminante menor</strong>. Biodegradable, pero puede afectar el ecosistema.
                   <br />
                   • Una batería usada: <strong>Contaminante severo</strong>. Libera metales pesados y sustancias tóxicas.
-                  <br />
                 </p>
                 <button
                     className="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
-                    onClick={() => {
-                      console.log('Siguiente pregunta');
-                    }}
+                    onClick={() => console.log('Siguiente pregunta')}
                 >
                   Siguiente pregunta
                 </button>
