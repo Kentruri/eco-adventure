@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import CowModel from './CowModel';
 import CokeModel from './CokeModel';
 import TextileModel from './TextileModel';
-import TrashModel from './TrashModel';
+import OceanModel from './OceanModel';
 
 function DraggableObject({ name, onDrop, children, ...props }) {
   const ref = useRef();
@@ -192,10 +192,10 @@ const QuestionTwo = () => {
                 />
               </DraggableObject>
           )}
-          <TrashModel
+          <OceanModel
               position={[4, -2.5, 0]}
               rotation={[0, Math.PI / 0.6, 0]}
-              scale={[0.005, 0.005, 0.005]}
+              scale={[0.1, 0.1, 0.1]}
           />
         </Canvas>
 
