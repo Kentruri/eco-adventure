@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import BatModel from "./BatModel";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 const Shortage = () => {
   const [cameraPosition, setCameraPosition] = useState({ x: -6, y: 0, z: -1 });
@@ -199,13 +200,28 @@ const Shortage = () => {
           shadows
           onCreated={({ camera }) => {
             cameraRef.current = camera;
-            camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+            camera.position.set(
+              cameraPosition.x,
+              cameraPosition.y,
+              cameraPosition.z
+            );
             camera.lookAt(0, 0, 0);
           }}
         >
           <ambientLight intensity={1.5} />
-          <pointLight castShadow color="white" position={[0, 2, 0]} intensity={1.5} distance={5} />
+          <pointLight
+            castShadow
+            color="white"
+            position={[0, 2, 0]}
+            intensity={1.5}
+            distance={5}
+          />
           <Environment preset="sunset" background />
+
+          {/* Posprocesado */}
+          <EffectComposer>
+            <Bloom intensity={1} kernelSize={3} luminanceThreshold={0.2} />
+          </EffectComposer>
 
           <Html
             position={htmlPosition}
@@ -213,12 +229,19 @@ const Shortage = () => {
             transform
             occlude
           >
-            <h1 className="text-3xl font-bold text-white" style={{ textShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)" }}>
+            <h1
+              className="text-3xl font-bold text-white"
+              style={{ textShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)" }}
+            >
               Sensibilización
             </h1>
           </Html>
 
-          <TapWaterModel ref={modelRef} position={[-5.1, -0.4, -1.58]} stopAnimation={stopAnimation} />
+          <TapWaterModel
+            ref={modelRef}
+            position={[-5.1, -0.4, -1.58]}
+            stopAnimation={stopAnimation}
+          />
         </Canvas>
 
         <div className="absolute right-0 top-[30%] flex flex-col items-center justify-center p-8 space-y-8">
