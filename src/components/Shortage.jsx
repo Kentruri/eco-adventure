@@ -1,8 +1,9 @@
 import TapWaterModel from "@/components/TapWaterModel";
-import { Environment, Html } from "@react-three/drei";
+import { Environment, Html, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
+import BatModel from "./BatModel";
 
 const Shortage = () => {
   const [cameraPosition, setCameraPosition] = useState({ x: -6, y: 0, z: -1 });
@@ -276,15 +277,94 @@ const Shortage = () => {
         className={`relative w-full h-[100vh] flex items-center justify-center bg-blue-100 transition-transform duration-1000 ${currentSection !== 3 ? "hidden" : ""
           }`}
       >
-        <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-2xl text-center">
-          <h1 className="text-5xl font-bold mb-4 text-black">Sensibilización</h1>
-          <p className="text-xl mb-6 text-black">
-            Entender la importancia de cuidar los recursos hídricos es fundamental para preservar nuestro planeta.
-          </p>
-          <p className="text-lg text-black">
-            Este espacio está diseñado para ayudarte a reflexionar sobre tus acciones y cómo estas impactan en el medio ambiente.
-          </p>
+        <Canvas shadows>
+          <PerspectiveCamera
+            makeDefault
+            position={[33, 50, 90]}
+            rotation={[-0.51, 0.25, 0]} 
+            fov={3}
+          />
+          <directionalLight
+            castShadow
+            position={[0, 50, 0]} // Directamente desde arriba
+            intensity={1.5} // Intensidad moderada
+            shadow-mapSize={[1024, 1024]}
+          />
+          <directionalLight
+            castShadow
+            position={[10, 10, 10]}
+            intensity={2}
+            shadow-mapSize={[1024, 1024]}
+          />
+          <directionalLight
+            castShadow
+            position={[-10, -10, -10]}
+            intensity={2}
+            shadow-mapSize={[1024, 1024]}
+          />
+          <BatModel position={[3, -1, -1]} />
+        </Canvas>
+        <div
+
+          className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl absolute top-[100px] left-[10px] text-start"
+        >
+          <h1 class="text-2xl">Reduce el consumo de carne</h1>
+          <br />
+
+          <span className="text-lg mb-8 text-black">
+            Incorpora más días sin carne a tu dieta (como los lunes sin carne).
+          </span>
+
+          <span className="text-lg mb-8 text-black">
+            Prueba opciones de proteínas vegetales como legumbres, tofu o seitán.
+
+          </span>
+          <div className="flex justify-center w-full">
+           
+          </div>
         </div>
+
+        <div
+
+          className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl absolute top-[100px] right-[10px] text-start"
+        >
+          <h1 class="text-2xl">Reduce el consumo de bebidas azucaradas y enlatadas</h1>
+          <br />
+
+          <span className="text-lg mb-8 text-black">
+            Prefiere bebidas caseras como jugos naturales o infusiones, que no generan residuos de plástico o aluminio.
+          </span>
+
+          <span className="text-lg mb-8 text-black">
+            Lleva un termo reutilizable y prepara tus propias bebidas en casa.
+
+          </span>
+          <div className="flex justify-center w-full">
+
+          </div>
+        </div>
+        
+        <div
+
+          className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl absolute top-[450px] right-[10px] text-start"
+        >
+          <h1 class="text-2xl">Evita el fast fashion</h1>
+          <br />
+
+          <span className="text-lg mb-8 text-black">
+            Compra ropa de segunda mano o intercambia prendas con amigos para reducir la demanda de producción.
+          </span>
+
+          <span className="text-lg mb-8 text-black">
+            Opta por marcas que garanticen prácticas sostenibles y éticas.
+          </span>
+          <div className="flex justify-center w-full">
+
+          </div>
+        </div>
+
+
+
       </div>
     </div>
   );
