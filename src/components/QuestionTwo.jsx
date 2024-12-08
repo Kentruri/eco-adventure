@@ -58,9 +58,9 @@ function DraggableObject({ name, onDrop, children, ...props }) {
 }
 
 const QuestionTwo = () => {
-  const [bananaVisible, setBananaVisible] = useState(true); // Cambiado de cokeVisible a bananaVisible
-  const [batteryVisible, setBatteryVisible] = useState(true);
-  const [bottleVisible, setBottleVisible] = useState(true);
+  const [bananaVisible] = useState(true); // Cambiado de cokeVisible a bananaVisible
+  const [batteryVisible] = useState(true);
+  const [bottleVisible] = useState(true);
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -71,7 +71,7 @@ const QuestionTwo = () => {
     const distanceToTrash = position.distanceTo(trashPosition);
 
     const industries = {
-      banana: 'industria de bebidas', // Cambiado de coke a banana
+      banana: 'industria de bebidas',
       battery: 'industria de baterías',
       bottle: 'industria ganadera',
     };
@@ -140,23 +140,24 @@ const QuestionTwo = () => {
               outlineColor="black"
               fontWeight="bold"
           >
-            segunda pregunta
+            Segunda Pregunta
           </Text>
 
           <Text
-              position={[-6.2, 1, 0]}
-              fontSize={0.3}
+              position={[-6.2, 1.5, 0]}
+              fontSize={0.25}
               color="white"
               anchorX="left"
               anchorY="top"
           >
-            Saca de la basura el objeto correspondiente a la industria que menos agua
-            desperdicia al año
-            {'\n'}
-            {'\n'}
-            • industria de bebidas{''}
-            • industria de baterías{''}
-            • industria ganadera
+            ¿Cuál de estos objetos es el MÁS contaminante para el agua? ¡Sácalo del Oceano!
+            {"\n"}
+            {"\n"}
+            • Una botella de plástico.{"\n"}
+            • Una cáscara de fruta.{"\n"}
+            • Una batería usada.{"\n"}
+            {"\n"}
+            Arrastra el objeto MÁS contaminante fuera del agua.
           </Text>
 
           {bananaVisible && (
@@ -199,7 +200,7 @@ const QuestionTwo = () => {
                 onClick={closeModal}
             >
               <div className="text-center text-white max-w-lg mx-auto">
-                {message === 'industria de baterías' ? (
+                {message === 'battery' ? (
                     <>
                       <h1 className="text-4xl font-bold">
                         Acertaste, llevas 2/3 respuestas correctas
@@ -215,12 +216,12 @@ const QuestionTwo = () => {
                     </>
                 )}
                 <p className="mt-6 text-lg">
-                  La industria ganadera consume <strong>3000 billones</strong> de litros al
-                  año. <br />
-                  La industria de baterías consume <strong>100 billones</strong> de litros al
-                  año. <br />
-                  La industria de bebidas consume <strong>450,000 millones</strong> de litros
-                  al año.
+                  • Una botella de plástico: <strong>Contaminante moderado</strong>. Tarda siglos en degradarse y daña la fauna.
+                  <br />
+                  • Una cáscara de fruta: <strong>contaminante menor</strong>. Biodegradable, pero puede afectar el ecosistema.
+                  <br />
+                  • Una batería usada: <strong>Contaminante severo</strong>. Libera metales pesados y sustancias tóxicas.
+                  <br />
                 </p>
                 <button
                     className="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
