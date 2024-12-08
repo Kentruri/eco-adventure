@@ -3,8 +3,8 @@ import { OrthographicCamera, Text } from '@react-three/drei';
 import React, { useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import BottleModel from './BottleModel';
-import CokeModel from './CokeModel';
-import BatteryModel from './BatteryModel'; // Reemplazado TextileModel por BatteryModel
+import BananaModel from './BananaModel'; // Reemplazado CokeModel por BananaModel
+import BatteryModel from './BatteryModel';
 import OceanModel from './OceanModel';
 
 function DraggableObject({ name, onDrop, children, ...props }) {
@@ -58,38 +58,33 @@ function DraggableObject({ name, onDrop, children, ...props }) {
 }
 
 const QuestionTwo = () => {
-  const [cokeVisible, setCokeVisible] = useState(true);
-  const [batteryVisible, setBatteryVisible] = useState(true); // Cambiado de textileVisible a batteryVisible
+  const [bananaVisible, setBananaVisible] = useState(true); // Cambiado de cokeVisible a bananaVisible
+  const [batteryVisible, setBatteryVisible] = useState(true);
   const [bottleVisible, setBottleVisible] = useState(true);
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const handleDrop = (name, position) => {
-    // Posición y radio de la caneca
     const trashPosition = new THREE.Vector3(4, -2.5, 0);
     const trashRadius = 2;
 
-    // Calcular distancia del objeto a la caneca
     const distanceToTrash = position.distanceTo(trashPosition);
 
-    // Mapear nombres a industrias
     const industries = {
-      coke: 'industria de bebidas',
-      battery: 'industria de baterías', // Cambiado de textile a battery
+      banana: 'industria de bebidas', // Cambiado de coke a banana
+      battery: 'industria de baterías',
       bottle: 'industria ganadera',
     };
 
-    // Verificar si el objeto fue sacado de la caneca
     if (distanceToTrash > trashRadius) {
       const selectedIndustry = industries[name];
-      const isCorrect = name === 'battery'; // La respuesta correcta ahora es "battery"
+      const isCorrect = name === 'battery';
 
-      // Mostrar modal con el mensaje adecuado
       setShowModal(true);
       if (isCorrect) {
-        setMessage('industria de baterías'); // Mensaje para la respuesta correcta
+        setMessage('industria de baterías');
       } else {
-        setMessage(selectedIndustry); // Mostrar la industria seleccionada
+        setMessage(selectedIndustry);
       }
     }
   };
@@ -155,9 +150,7 @@ const QuestionTwo = () => {
               anchorX="left"
               anchorY="top"
           >
-            Saca de la basura el{''}
-            objeto correspondiente a la{''}
-            industria que menos agua{''}
+            Saca de la basura el objeto correspondiente a la industria que menos agua
             desperdicia al año
             {'\n'}
             {'\n'}
@@ -166,19 +159,19 @@ const QuestionTwo = () => {
             • industria ganadera
           </Text>
 
-          {cokeVisible && (
-              <DraggableObject name="coke" onDrop={handleDrop}>
-                <CokeModel
-                    position={[4, -2.5, 0]} // Inicia dentro de la caneca
-                    scale={[30, 30, 30]}
-                    rotation={[0, Math.PI / 1, 0]}
+          {bananaVisible && (
+              <DraggableObject name="banana" onDrop={handleDrop}>
+                <BananaModel
+                    position={[4.2, -1.9, 0]}
+                    scale={[2, 2, 2]}
+                    rotation={[0.5, 1, 0]}
                 />
               </DraggableObject>
           )}
           {batteryVisible && (
               <DraggableObject name="battery" onDrop={handleDrop}>
                 <BatteryModel
-                    position={[1, -2, 0]} // Inicia dentro de la caneca
+                    position={[1, -2, 0]}
                     scale={[0.3, 0.3, 0.3]}
                     rotation={[1, Math.PI / 1, 0.5]}
                 />
@@ -187,7 +180,7 @@ const QuestionTwo = () => {
           {bottleVisible && (
               <DraggableObject name="bottle" onDrop={handleDrop}>
                 <BottleModel
-                    position={[4, -2.5, 0]} // Inicia dentro de la caneca
+                    position={[4, -2.5, 0]}
                     rotation={[0, Math.PI / 0.6, 0]}
                     scale={[0.5, 0.5, 0.5]}
                 />
@@ -196,11 +189,10 @@ const QuestionTwo = () => {
           <OceanModel
               position={[4, -2.5, 0]}
               rotation={[0, Math.PI / 0.6, 0]}
-              scale={[0.1, 0.1, 0.1]}
+              scale={[0.1, 0.3, 0.1]}
           />
         </Canvas>
 
-        {/* Modal */}
         {showModal && (
             <div
                 className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50"
@@ -223,12 +215,12 @@ const QuestionTwo = () => {
                     </>
                 )}
                 <p className="mt-6 text-lg">
-                  La industria ganadera consume <strong>3000 billones</strong> de litros
-                  al año. <br />
-                  La industria de baterías consume <strong>100 billones</strong> de litros
-                  al año. <br />
-                  La industria de bebidas consume <strong>450,000 millones</strong> de
-                  litros al año.
+                  La industria ganadera consume <strong>3000 billones</strong> de litros al
+                  año. <br />
+                  La industria de baterías consume <strong>100 billones</strong> de litros al
+                  año. <br />
+                  La industria de bebidas consume <strong>450,000 millones</strong> de litros
+                  al año.
                 </p>
                 <button
                     className="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
