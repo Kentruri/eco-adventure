@@ -2,7 +2,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrthographicCamera, Text } from '@react-three/drei';
 import React, { useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
-import CowModel from './CowModel';
+import BottleModel from './BottleModel';
 import CokeModel from './CokeModel';
 import TextileModel from './TextileModel';
 import OceanModel from './OceanModel';
@@ -60,7 +60,7 @@ function DraggableObject({ name, onDrop, children, ...props }) {
 const QuestionTwo = () => {
   const [cokeVisible, setCokeVisible] = useState(true);
   const [textileVisible, setTextileVisible] = useState(true);
-  const [cowVisible, setCowVisible] = useState(true);
+  const [bottleVisible, setBottleVisible] = useState(true); // Cambiado de cowVisible a bottleVisible
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -76,7 +76,7 @@ const QuestionTwo = () => {
     const industries = {
       coke: 'industria de bebidas',
       textile: 'industria textil',
-      cow: 'industria ganadera',
+      bottle: 'industria ganadera', // Cambiado de cow a bottle
     };
 
     // Verificar si el objeto fue sacado de la caneca
@@ -184,11 +184,12 @@ const QuestionTwo = () => {
                 />
               </DraggableObject>
           )}
-          {cowVisible && (
-              <DraggableObject name="cow" onDrop={handleDrop}>
-                <CowModel
+          {bottleVisible && (
+              <DraggableObject name="bottle" onDrop={handleDrop}>
+                <BottleModel
                     position={[4, -2.5, 0]} // Inicia dentro de la caneca
                     rotation={[0, Math.PI / 0.6, 0]}
+                    scale={[0.5, 0.5, 0.5]}
                 />
               </DraggableObject>
           )}
