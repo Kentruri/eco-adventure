@@ -303,10 +303,20 @@ const Shortage = () => {
             shadow-mapSize={[1024, 1024]}
           />
           <BatModel position={[3, -1, -1]} />
+          <Html
+            position={[5,3,2]}
+            rotation={[0, -5.5, -.5]}
+            transform
+            occlude
+          >
+            <h1 className="text-3xl font-bold text-white" style={{ textShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)" }}>
+              Soluciones
+            </h1>
+          </Html>
         </Canvas>
         <div
 
-          className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl absolute top-[100px] left-[10px] text-start"
+          className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl absolute top-[450px] left-[100px] text-start"
         >
           <h1 class="text-2xl">Reduce el consumo de carne</h1>
           <br />
