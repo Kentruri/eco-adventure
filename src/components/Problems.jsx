@@ -17,7 +17,7 @@ const Problems = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    if (!hasInteracted) setHasInteracted(true); // Cambiar hasInteracted a true en el primer clic
+    if (!hasInteracted) setHasInteracted(true);
   };
 
   return (
