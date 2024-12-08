@@ -4,7 +4,7 @@ import React, { useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import BottleModel from './BottleModel';
 import CokeModel from './CokeModel';
-import TextileModel from './TextileModel';
+import BatteryModel from './BatteryModel'; // Reemplazado TextileModel por BatteryModel
 import OceanModel from './OceanModel';
 
 function DraggableObject({ name, onDrop, children, ...props }) {
@@ -59,8 +59,8 @@ function DraggableObject({ name, onDrop, children, ...props }) {
 
 const QuestionTwo = () => {
   const [cokeVisible, setCokeVisible] = useState(true);
-  const [textileVisible, setTextileVisible] = useState(true);
-  const [bottleVisible, setBottleVisible] = useState(true); // Cambiado de cowVisible a bottleVisible
+  const [batteryVisible, setBatteryVisible] = useState(true); // Cambiado de textileVisible a batteryVisible
+  const [bottleVisible, setBottleVisible] = useState(true);
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -75,19 +75,19 @@ const QuestionTwo = () => {
     // Mapear nombres a industrias
     const industries = {
       coke: 'industria de bebidas',
-      textile: 'industria textil',
-      bottle: 'industria ganadera', // Cambiado de cow a bottle
+      battery: 'industria de baterías', // Cambiado de textile a battery
+      bottle: 'industria ganadera',
     };
 
     // Verificar si el objeto fue sacado de la caneca
     if (distanceToTrash > trashRadius) {
       const selectedIndustry = industries[name];
-      const isCorrect = name === 'textile'; // La respuesta correcta es "textile"
+      const isCorrect = name === 'battery'; // La respuesta correcta ahora es "battery"
 
       // Mostrar modal con el mensaje adecuado
       setShowModal(true);
       if (isCorrect) {
-        setMessage('industria textil'); // Mensaje para la respuesta correcta
+        setMessage('industria de baterías'); // Mensaje para la respuesta correcta
       } else {
         setMessage(selectedIndustry); // Mostrar la industria seleccionada
       }
@@ -162,8 +162,8 @@ const QuestionTwo = () => {
             {'\n'}
             {'\n'}
             • industria de bebidas{''}
-            • industria ganadera{''}
-            • industria textil
+            • industria de baterías{''}
+            • industria ganadera
           </Text>
 
           {cokeVisible && (
@@ -175,12 +175,12 @@ const QuestionTwo = () => {
                 />
               </DraggableObject>
           )}
-          {textileVisible && (
-              <DraggableObject name="textile" onDrop={handleDrop}>
-                <TextileModel
-                    position={[4, -2.5, 0]} // Inicia dentro de la caneca
-                    scale={[2, 2, 2]}
-                    rotation={[1, Math.PI / 1, 0]}
+          {batteryVisible && (
+              <DraggableObject name="battery" onDrop={handleDrop}>
+                <BatteryModel
+                    position={[1, -2, 0]} // Inicia dentro de la caneca
+                    scale={[0.3, 0.3, 0.3]}
+                    rotation={[1, Math.PI / 1, 0.5]}
                 />
               </DraggableObject>
           )}
@@ -207,7 +207,7 @@ const QuestionTwo = () => {
                 onClick={closeModal}
             >
               <div className="text-center text-white max-w-lg mx-auto">
-                {message === 'industria textil' ? (
+                {message === 'industria de baterías' ? (
                     <>
                       <h1 className="text-4xl font-bold">
                         Acertaste, llevas 2/3 respuestas correctas
@@ -225,7 +225,7 @@ const QuestionTwo = () => {
                 <p className="mt-6 text-lg">
                   La industria ganadera consume <strong>3000 billones</strong> de litros
                   al año. <br />
-                  La industria textil consume <strong>100 billones</strong> de litros
+                  La industria de baterías consume <strong>100 billones</strong> de litros
                   al año. <br />
                   La industria de bebidas consume <strong>450,000 millones</strong> de
                   litros al año.
