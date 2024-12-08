@@ -20,6 +20,21 @@ const Shortage = () => {
   const secondSectionRef = useRef(null);
   const sensibilizationSectionRef = useRef(null);
 
+  useEffect(() => {
+    const audio = new Audio("/water.mp3"); 
+    audio.loop = true;
+    audio.volume = 1; 
+
+    audio.play().catch((error) => {
+      console.error("Error al reproducir el audio:", error);
+    });
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0; 
+    };
+  }, []);
+
   const handleScroll = (direction) => {
     if (direction === "down" && currentSection === 1) {
       gsap.to(firstSectionRef.current, {
