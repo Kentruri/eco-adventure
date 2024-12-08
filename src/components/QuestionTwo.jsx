@@ -66,9 +66,9 @@ const QuestionTwo = () => {
 
     if (distanceToOcean > oceanRadius) {
       const industries = {
-        banana: 'industria de bebidas',
-        battery: 'industria de baterías',
-        bottle: 'industria ganadera',
+        banana: 'cascaras de alimentos',
+        battery: 'baterías usadas',
+        bottle: 'botellas des plastico',
       };
 
       const isCorrect = name === 'battery';
@@ -186,6 +186,7 @@ const QuestionTwo = () => {
                 </p>
                 <button
                     className="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
+                    //Logica pregunta 3
                     onClick={() => console.log('Siguiente pregunta')}
                 >
                   Siguiente pregunta
