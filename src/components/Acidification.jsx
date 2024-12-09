@@ -155,7 +155,14 @@ const Acidification = () => {
 
   return (
     <div className="relative flex flex-col items-center">
-      <div className="w-full h-[100vh] flex items-center justify-center bg-gray-200 relative">
+      <div
+        className="w-full h-[100vh] flex items-center justify-center bg-gray-200 relative"
+        style={{
+          backgroundImage: "url('/playa.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg max-w-2xl">
           <h1 className="text-4xl font-bold mb-6 text-black">Introducción</h1>
           <p className="text-lg mb-8 text-black">
@@ -334,7 +341,14 @@ const Acidification = () => {
         </div>
       </div>
 
-      <div className="w-full h-[100vh] flex items-center justify-center bg-gray-200 relative">
+      <div
+        className="w-full h-[100vh] flex items-center justify-center bg-gray-200 relative"
+        style={{
+          backgroundImage: "url('/mar.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="container mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg">
