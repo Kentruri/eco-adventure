@@ -4,55 +4,73 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 
 const BottleModel = React.forwardRef(
-    ({ position, stopAnimation, animationSpeed = 1, rotation = [0, 0, 0], ...props }, ref) => {
-      const gltf = useLoader(GLTFLoader, "/models/bottle.glb");
-      const mixer = useRef(null);
-      const hiddenObjects = useRef([]);
+    (
+        {
+            position,
+            stopAnimation,
+            animationSpeed = 1,
+            rotation = [0, 0, 0],
+            opacity = 1, // Agregado para el efecto de desvanecimiento
+            ...props
+        },
+        ref
+    ) => {
+        const gltf = useLoader(GLTFLoader, "/models/bottle.glb");
+        const mixer = useRef(null);
 
-      useEffect(() => {
-        gltf.scene.traverse((child) => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-            child.material.side = THREE.DoubleSide;
-          }
-        });
-
-        mixer.current = new THREE.AnimationMixer(gltf.scene);
-        gltf.animations.forEach((clip) => {
-          const action = mixer.current.clipAction(clip);
-          action.play();
-        });
-
-        mixer.current.timeScale = animationSpeed;
-      }, [gltf, animationSpeed]);
-
-      useEffect(() => {
-        if (mixer.current) {
-          if (stopAnimation) {
-            mixer.current.stopAllAction();
-            hiddenObjects.current.forEach((object) => {
-              object.visible = false;
+        useEffect(() => {
+            // Configuración de materiales
+            gltf.scene.traverse((child) => {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.material.side = THREE.DoubleSide;
+                    child.material.transparent = true;
+                    child.material.opacity = opacity; // Aplica opacidad
+                }
             });
-          } else {
+
+            // Configuración de la animación
+            mixer.current = new THREE.AnimationMixer(gltf.scene);
             gltf.animations.forEach((clip) => {
-              const action = mixer.current.clipAction(clip);
-              action.play();
+                const action = mixer.current.clipAction(clip);
+                action.play();
             });
-            hiddenObjects.current.forEach((object) => {
-              object.visible = true;
-            });
-          }
-        }
-      }, [stopAnimation, gltf]);
 
-      useFrame((state, delta) => {
-        if (mixer.current && !stopAnimation) {
-          mixer.current.update(delta);
-        }
-      });
+            mixer.current.timeScale = animationSpeed;
+        }, [gltf, animationSpeed, opacity]);
 
-      return <primitive object={gltf.scene} ref={ref} position={position} rotation={rotation} {...props} />;
+        useEffect(() => {
+            if (mixer.current) {
+                if (stopAnimation) {
+                    mixer.current.stopAllAction();
+                    gltf.scene.visible = false; // Oculta el objeto
+                } else {
+                    gltf.animations.forEach((clip) => {
+                        const action = mixer.current.clipAction(clip);
+                        action.play();
+                    });
+                    gltf.scene.visible = true; // Muestra el objeto
+                }
+            }
+        }, [stopAnimation, gltf]);
+
+        // Actualización de la animación
+        useFrame((_, delta) => {
+            if (mixer.current && !stopAnimation) {
+                mixer.current.update(delta);
+            }
+        });
+
+        return (
+            <primitive
+                object={gltf.scene}
+                ref={ref}
+                position={position}
+                rotation={rotation}
+                {...props}
+            />
+        );
     }
 );
 
